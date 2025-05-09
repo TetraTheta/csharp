@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <LangVersion>default</LangVersion>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>none</DebugType>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <!-- Version Information -->
+  <Import Project="..\Version.targets" />
+  <PropertyGroup>
+    <AssemblyName>ConvertScreenshot</AssemblyName>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" PrivateAssets="All" />
+    <PackageReference Include="Fody" PrivateAssets="All">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="Resource.Embedder" />
+    <PackageReference Include="nulastudio.NetBeauty" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\library\alias-enum\AliasEnum.csproj" />
+    <ProjectReference Include="..\..\library\ansi\ANSI.csproj" />
+    <ProjectReference Include="..\Option\Option.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Locale\LConsole.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LConsole.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Locale\LConsole.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>LConsole.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
