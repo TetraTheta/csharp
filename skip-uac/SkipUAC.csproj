@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <LangVersion>default</LangVersion>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>none</DebugType>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <!-- Version Information -->
+  <PropertyGroup>
+    <AssemblyName>SkipUAC</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Company>TetraTheta</Company>
+    <Copyright>Copyright (c) TetraTheta All rights reserved</Copyright>
+    <Description>Skip UAC Prompt by utilizing Task Scheduler</Description>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+    <Product>SkipUAC</Product>
+    <Title>SkipUAC</Title>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" PrivateAssets="All" />
+    <PackageReference Include="Fody" PrivateAssets="all">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="TaskScheduler" />
+  </ItemGroup>
+</Project>

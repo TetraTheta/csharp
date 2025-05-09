@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <LangVersion>default</LangVersion>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>none</DebugType>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <!-- Version Information -->
+  <PropertyGroup>
+    <AssemblyName>ClearTemp</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Company>TetraTheta</Company>
+    <Copyright>Copyright (c) TetraTheta All rights reserved</Copyright>
+    <Description>Clear Temporary Files</Description>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+    <Product>ClearTemp</Product>
+    <Title>ClearTemp</Title>
+  </PropertyGroup>
+</Project>
