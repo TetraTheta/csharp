@@ -8,7 +8,7 @@ for /d /r %%i in (.bin .obj .vs) do (
   )
 )
 @REM Remove empty directories
-for /f "delims=" %%d in ('dir /s /b /ad ^| sort /r') do (
+for /f "delims=" %%d in ('dir /s /b /ad ^| findstr /vi "\\.git\\" ^| sort /r') do (
   dir /b "%%d" | findstr /r . >nul 2>nul || (
     echo Deleting %%d
     rd "%%d"
