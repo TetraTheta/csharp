@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <LangVersion>latest</LangVersion>
     <OutputType>Exe</OutputType>
     <StartupObject>Pathed.Program</StartupObject>
     <TargetFramework>net48</TargetFramework>

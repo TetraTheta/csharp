@@ -12,7 +12,7 @@ public static class ANSI {
   public static readonly string RST = Style(null, null, [global::ANSI.Style.RESET]);
   public static readonly string UL = Style(null, null, [global::ANSI.Style.UNDERLINE]);
 
-  public static string Style(string foreground = null, string background = null, params string[] styles) {
+  public static string Style(string? foreground = null, string? background = null, params string[] styles) {
     List<string> codes = [];
 
     if (styles.Contains(global::ANSI.Style.RESET))

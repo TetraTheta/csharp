@@ -1,14 +1,13 @@
 using System.Collections.Generic;
-using System.Text;
 
 namespace OutputColorizer.Format;
 
 public class Lexer(string text) {
-  private Token[] _tokens;
+  private List<Token> _tokens = [];
 
   private readonly string Text = text;
 
-  public Token[] Tokenize() {
+  public List<Token> Tokenize() {
     if (_tokens != null) return _tokens;
 
     List<Token> tokens = [];

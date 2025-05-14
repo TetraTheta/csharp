@@ -1,5 +1,3 @@
-#pragma warning disable CRR0047
-
 using OutputColorizer.Format;
 using System;
 using System.Collections.Generic;
@@ -10,13 +8,9 @@ namespace OutputColorizer;
 public static class Colorizer {
   private static readonly BaseColorizer s_instance = new DerivedColorizer();
 
-  public static void Write(string message, params object[] args) {
-    s_instance.Write(message, args);
-  }
+  public static void Write(string message, params object[] args) => s_instance.Write(message, args);
 
-  public static void WriteLine(string message, params object[] args) {
-    s_instance.WriteLine(message, args);
-  }
+  public static void WriteLine(string message, params object[] args) => s_instance.WriteLine(message, args);
 
   private class DerivedColorizer : BaseColorizer {
     public DerivedColorizer() : base(new ConsoleWriter()) {
@@ -27,13 +21,9 @@ public static class Colorizer {
 public static class ErrorColorizer {
   private static readonly BaseColorizer s_instance = new DerivedErrorColorizer();
 
-  public static void Write(string message, params object[] args) {
-    s_instance.Write(message, args);
-  }
+  public static void Write(string message, params object[] args) => s_instance.Write(message, args);
 
-  public static void WriteLine(string message, params object[] args) {
-    s_instance.WriteLine(message, args);
-  }
+  public static void WriteLine(string message, params object[] args) => s_instance.WriteLine(message, args);
 
   private class DerivedErrorColorizer : BaseColorizer {
     public DerivedErrorColorizer() : base(new ConsoleErrorWriter()) {
@@ -53,9 +43,8 @@ public abstract class BaseColorizer(IOutputWriter printer) {
     return map;
   }
 
-  public void Write(string message, params object[] args) {
-    InternalWrite(message, args);
-  }
+  public void Write(string message, params object[] args) => InternalWrite(message, args);
+
   public void WriteLine(string message, params object[] args) {
     InternalWrite(message, args);
     s_printer.WriteLine(string.Empty);
@@ -64,7 +53,7 @@ public abstract class BaseColorizer(IOutputWriter printer) {
   private void InternalWrite(string message, params object[] args) {
     Stack<ConsoleColor> colors = new();
     Lexer lex = new(message);
-    Token[] tokens = lex.Tokenize();
+    Token[] tokens = [.. lex.Tokenize()];
 
     CheckFormat(lex);
 
@@ -127,7 +116,7 @@ public abstract class BaseColorizer(IOutputWriter printer) {
   }
 
   private static void CheckFormat(Lexer lex) {
-    Token[] tokens = lex.Tokenize();
+    Token[] tokens = [.. lex.Tokenize()];
 
     int brackets = 0;
     // check to see if the parens are balanced.

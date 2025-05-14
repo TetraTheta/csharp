@@ -20,7 +20,7 @@ public abstract class AliasEnumTypeConverter<TEnum> : EnumConverter where TEnum 
   protected AliasEnumTypeConverter() : base(typeof(TEnum)) {
   }
 
-  public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
+  public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value) {
     if (value is string str) {
       foreach (KeyValuePair<TEnum, string[]> pair in enumToAliases) {
         TEnum enumValue = pair.Key;
