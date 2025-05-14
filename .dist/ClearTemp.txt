@@ -1,0 +1,9 @@
+%LocalAppData%\CrashDumps
+%LocalAppData%\Microsoft\Windows\Explorer
+%LocalAppData%\Microsoft\Windows\INetCache
+%LocalAppData%\Temp
+%ProgramData%\temp
+%TEMP%
+%TMP%
+%windir%\SoftwareDistribution\Download
+%windir%\Temp
