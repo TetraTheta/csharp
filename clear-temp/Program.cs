@@ -14,7 +14,20 @@ internal class Program {
   }
 
   private static void Main() {
-    List<string> list = [.. TextConfig.ParseSinglePath("ClearTemp.txt")
+    // Get absolute path of 'ClearTemp.txt'
+    string currentDir = Path.Combine(Environment.CurrentDirectory, "ClearTemp.txt");
+    string binaryDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ClearTemp.txt");
+
+    string configFile;
+    if (File.Exists(currentDir)) {
+      configFile = Path.GetFullPath(currentDir);
+    } else if (File.Exists(binaryDir)) {
+      configFile = Path.GetFullPath(binaryDir);
+    } else {
+      throw new FileNotFoundException("'ClearTemp.txt' is not found");
+    }
+
+    List<string> list = [.. TextConfig.ParseSinglePath(configFile)
       .Select(path => Environment.ExpandEnvironmentVariables(path))
       .Select(path => Path.GetFullPath(path))
       .Distinct(StringComparer.OrdinalIgnoreCase)];
