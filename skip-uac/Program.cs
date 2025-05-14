@@ -21,8 +21,16 @@ internal static class Program {
       return;
     }
 
-    string configFile = args[0];
-    bool forceRegister = args.Any(a => a.Equals("/register", StringComparison.OrdinalIgnoreCase));
+    // Get absolute path of config file
+    string configFile;
+    try {
+      configFile = Path.GetFullPath(args[0]);
+    } catch (Exception ex) {
+      MessageBox.Show(ex.ToString(), ex.GetType().FullName);
+      return;
+    }
+
+    bool forceRegister = args.Length > 1 && args[1].Equals("/register", StringComparison.OrdinalIgnoreCase);
     string taskName = Path.GetFileNameWithoutExtension(configFile);
 
     // Re-register task if needed
@@ -49,11 +57,7 @@ internal static class Program {
     RunTask(taskName);
   }
 
-  private static bool IsAdministrator() {
-    WindowsIdentity identity = WindowsIdentity.GetCurrent();
-    WindowsPrincipal principal = new(identity);
-    return principal.IsInRole(WindowsBuiltInRole.Administrator);
-  }
+  private static bool IsAdministrator() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
   private static void RestartAdmin(string[] args) {
     var psi = new ProcessStartInfo {
