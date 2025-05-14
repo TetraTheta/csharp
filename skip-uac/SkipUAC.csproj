@@ -34,4 +34,7 @@
     </PackageReference>
     <PackageReference Include="TaskScheduler" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\library\configuration\Configuration.csproj" />
+  </ItemGroup>
 </Project>
