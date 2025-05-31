@@ -1,6 +1,5 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
   <Color x:Key="AColour.Foreground.Static" R="15" G="15" B="15" A="255" />
   <Color x:Key="AColour.Foreground.Deeper" R="35" G="35" B="35" A="255" />
   <Color x:Key="AColour.Foreground.Disabled" R="65" G="65" B="65" A="255" />
