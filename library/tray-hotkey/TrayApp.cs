@@ -16,10 +16,12 @@ public class TrayApp : ApplicationContext {
       Icon = icon ?? SystemIcons.Application,
       Text = tooltip ?? string.Empty,
       ContextMenu = contextMenu ?? new([
-        new MenuItem("Exit", OnExit)
+        new MenuItem("Exit", OnExit) { DefaultItem = true, }
       ]),
       Visible = true
     };
+
+    trayIcon.DoubleClick += OnMouseDoubleClicked;
 
     HW = new HotkeyWindow(Assembly.GetEntryAssembly()!.GetName().Name!);
     HW.HotkeyPressed += OnHotkeyPressed;
@@ -37,6 +39,18 @@ public class TrayApp : ApplicationContext {
     if (callbacks.TryGetValue(e.HotkeyId, out Action action)) {
       try { action(); } catch (Exception ex) { MessageBox.Show(ex.ToString(), ex.GetType().FullName); } 
     }
+  }
+
+  private void OnMouseDoubleClicked(object sender, EventArgs e) {
+    MenuItem? defaultItem = null;
+    foreach (MenuItem item in trayIcon.ContextMenu.MenuItems) {
+      if (item.DefaultItem) {
+        defaultItem = item;
+        break;
+      }
+    }
+
+    defaultItem?.PerformClick();
   }
 
   protected override void Dispose(bool disposing) {
