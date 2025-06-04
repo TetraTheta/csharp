@@ -4,9 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewFolder", "NewFolder.csproj", "{34AD6540-56C2-410D-A8A3-DBB507107FE8}"
-	ProjectSection(ProjectDependencies) = postProject
-		{52F94451-7892-1962-2CE1-1C53699C3D2C} = {52F94451-7892-1962-2CE1-1C53699C3D2C}
-	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C8D5274F-AC00-46C7-1F8D-E88E81087A52}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarkModeForms", "..\library\dark-mode-forms\DarkModeForms.csproj", "{52F94451-7892-1962-2CE1-1C53699C3D2C}"
 EndProject
@@ -27,6 +26,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52F94451-7892-1962-2CE1-1C53699C3D2C} = {C8D5274F-AC00-46C7-1F8D-E88E81087A52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F28CBAE-295E-4E5A-81CF-05256C9E56BF}
