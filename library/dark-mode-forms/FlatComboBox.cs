@@ -8,7 +8,16 @@ namespace DarkModeForms {
   // *** CREDITS:  https://github.com/r-aghaei/FlatComboExample/tree/master
 
   public class FlatComboBox : ComboBox {
+    private const int WM_PAINT = 0xF;
     private Color borderColor = Color.Gray;
+
+    private Color buttonColor = Color.LightGray;
+    public enum RegionFlags {
+      ERROR = 0,
+      NULLREGION = 1,
+      SIMPLEREGION = 2,
+      COMPLEXREGION = 3,
+    }
 
     [DefaultValue(typeof(Color), "Gray")]
     public Color BorderColor {
@@ -20,9 +29,6 @@ namespace DarkModeForms {
         }
       }
     }
-
-    private Color buttonColor = Color.LightGray;
-
     [DefaultValue(typeof(Color), "LightGray")]
     public Color ButtonColor {
       get { return buttonColor; }
@@ -34,6 +40,12 @@ namespace DarkModeForms {
       }
     }
 
+    [DllImport("user32.dll")]
+    public static extern int GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
+    [DllImport("gdi32.dll")]
+    public static extern int SelectClipRgn(IntPtr hDC, IntPtr hRgn);
+    [DllImport("gdi32.dll")]
+    internal static extern bool DeleteObject(IntPtr hObject);
     protected override void WndProc(ref Message m) {
       if (m.Msg == WM_PAINT && DropDownStyle != ComboBoxStyle.Simple) {
         var clientRect = ClientRectangle;
@@ -136,14 +148,13 @@ namespace DarkModeForms {
       } else
         base.WndProc(ref m);
     }
-
-    private const int WM_PAINT = 0xF;
-
-    [StructLayout(LayoutKind.Sequential)]
-    public struct RECT {
-      public int L, T, R, B;
-    }
-
+    [DllImport("user32.dll")]
+    private static extern IntPtr BeginPaint(IntPtr hWnd,
+      [In, Out] ref PAINTSTRUCT lpPaint);
+    [DllImport("gdi32.dll")]
+    private static extern IntPtr CreateRectRgn(int x1, int y1, int x2, int y2);
+    [DllImport("user32.dll")]
+    private static extern bool EndPaint(IntPtr hWnd, ref PAINTSTRUCT lpPaint);
     [StructLayout(LayoutKind.Sequential)]
     public struct PAINTSTRUCT {
       public IntPtr hdc;
@@ -163,31 +174,9 @@ namespace DarkModeForms {
       public int reserved7;
       public int reserved8;
     }
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr BeginPaint(IntPtr hWnd,
-      [In, Out] ref PAINTSTRUCT lpPaint);
-
-    [DllImport("user32.dll")]
-    private static extern bool EndPaint(IntPtr hWnd, ref PAINTSTRUCT lpPaint);
-
-    [DllImport("gdi32.dll")]
-    public static extern int SelectClipRgn(IntPtr hDC, IntPtr hRgn);
-
-    [DllImport("user32.dll")]
-    public static extern int GetUpdateRgn(IntPtr hwnd, IntPtr hrgn, bool fErase);
-
-    public enum RegionFlags {
-      ERROR = 0,
-      NULLREGION = 1,
-      SIMPLEREGION = 2,
-      COMPLEXREGION = 3,
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RECT {
+      public int L, T, R, B;
     }
-
-    [DllImport("gdi32.dll")]
-    internal static extern bool DeleteObject(IntPtr hObject);
-
-    [DllImport("gdi32.dll")]
-    private static extern IntPtr CreateRectRgn(int x1, int y1, int x2, int y2);
   }
 }

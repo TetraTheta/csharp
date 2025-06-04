@@ -7,35 +7,34 @@ namespace DarkModeForms {
 
     #region Public Properties
 
-    [Description("Color for a decorative line"), Category("Appearance")]
-    public Color LineColor { get; set; } = SystemColors.Highlight;
+    [Description("Background color for the whole control"), Category("Appearance"), Browsable(true)]
+    public override Color BackColor { get; set; } = SystemColors.Control;
 
     [Description("Color for all Borders"), Category("Appearance")]
     public Color BorderColor { get; set; } = SystemColors.ControlDark;
 
-    [Description("Back color for selected Tab"), Category("Appearance")]
-    public Color SelectTabColor { get; set; } = SystemColors.ControlLight;
-
-    [Description("Fore Color for Selected Tab"), Category("Appearance")]
-    public Color SelectedForeColor { get; set; } = SystemColors.HighlightText;
-
-    [Description("Back Color for un-selected tabs"), Category("Appearance")]
-    public Color TabColor { get; set; } = SystemColors.ControlLight;
-
-    [Description("Background color for the whole control"), Category("Appearance"), Browsable(true)]
-    public override Color BackColor { get; set; } = SystemColors.Control;
-
     [Description("Fore Color for all Texts"), Category("Appearance")]
     public override Color ForeColor { get; set; } = SystemColors.ControlText;
 
+    [Description("Color for a decorative line"), Category("Appearance")]
+    public Color LineColor { get; set; } = SystemColors.Highlight;
+    [Description("Fore Color for Selected Tab"), Category("Appearance")]
+    public Color SelectedForeColor { get; set; } = SystemColors.HighlightText;
+
+    [Description("Back color for selected Tab"), Category("Appearance")]
+    public Color SelectTabColor { get; set; } = SystemColors.ControlLight;
     [Description("Shows a Close Button on each tab"), Category("Appearance")]
     public bool ShowTabCloseButton { get; set; } = true;
 
     [Description("Color for the Close Button on each tab"), Category("Appearance")]
     public Color TabCloseColor { get; set; }
 
+    [Description("Back Color for un-selected tabs"), Category("Appearance")]
+    public Color TabColor { get; set; } = SystemColors.ControlLight;
     #endregion Public Properties
 
+    private bool OverCloseTab = false;
+    private PreRemoveTab PreRemoveTabPage;
     public FlatTabControl() {
       try {
         Appearance = TabAppearance.Buttons;
@@ -48,73 +47,7 @@ namespace DarkModeForms {
       } catch { }
     }
 
-    protected override void InitLayout() {
-      SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-      SetStyle(ControlStyles.DoubleBuffer, true);
-      SetStyle(ControlStyles.ResizeRedraw, true);
-      SetStyle(ControlStyles.SupportsTransparentBackColor, true);
-      SetStyle(ControlStyles.UserPaint, true);
-      base.InitLayout();
-
-      TabCloseColor = this.ForeColor;
-    }
-
-    protected override void OnPaint(PaintEventArgs e) {
-      base.OnPaint(e);
-      DrawControl(e.Graphics);
-    }
-
     private delegate bool PreRemoveTab(int indx);
-
-    private PreRemoveTab PreRemoveTabPage;
-    private bool OverCloseTab = false;
-
-    protected override void OnMouseClick(MouseEventArgs e) {
-      // Reacts to the Click on the Close Tab Button:
-      if (ShowTabCloseButton) {
-        Point p = e.Location;
-        for (int i = 0; i < TabCount; i++) {
-          Rectangle r = GetTabRect(i);
-          r.Offset(6, 8);
-          r.Width = 12;
-          r.Height = 12;
-          if (r.Contains(p)) {
-            CloseTab(i);
-          }
-        }
-      }
-    }
-    protected override void OnMouseMove(MouseEventArgs e) {
-      /* Hightlighs the Close Button when the Mouse is over it  */
-      if (ShowTabCloseButton) {
-        Point p = e.Location;
-        for (int i = 0; i < TabCount; i++) {
-          Rectangle r = GetTabRect(i);
-          r.Offset(6, 8);
-          r.Width = 12;
-          r.Height = 12;
-
-          OverCloseTab = r.Contains(p); //<- Mouse is over the Close button
-
-          if (OverCloseTab) {
-            DrawTab(this.CreateGraphics(), this.TabPages[i], i);
-          } else {
-            if (TabCloseColor == Color.Red) {
-              DrawTab(this.CreateGraphics(), this.TabPages[i], i);
-            }
-          }
-        }
-      }
-      //base.OnMouseMove(e);
-    }
-    private void CloseTab(int i) {
-      if (PreRemoveTabPage != null) {
-        bool closeIt = PreRemoveTabPage(i);
-        if (!closeIt)
-          return;
-      }
-      TabPages.Remove(TabPages[i]);
-    }
 
     internal void DrawControl(Graphics g) {
       try {
@@ -154,7 +87,6 @@ namespace DarkModeForms {
         }
       } catch { }
     }
-
     internal void DrawTab(Graphics g, TabPage customTabPage, int nIndex) {
       Rectangle tabRect = GetTabRect(nIndex);
       Rectangle tabTextRect = GetTabRect(nIndex);
@@ -221,6 +153,67 @@ namespace DarkModeForms {
       Rectangle rectangleF = tabTextRect;
       rectangleF.Y += 2; // Horizontally Centered
       TextRenderer.DrawText(g, customTabPage.Text, Font, rectangleF, isSelected ? SelectedForeColor : ForeColor);
+    }
+    protected override void InitLayout() {
+      SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+      SetStyle(ControlStyles.DoubleBuffer, true);
+      SetStyle(ControlStyles.ResizeRedraw, true);
+      SetStyle(ControlStyles.SupportsTransparentBackColor, true);
+      SetStyle(ControlStyles.UserPaint, true);
+      base.InitLayout();
+
+      TabCloseColor = this.ForeColor;
+    }
+
+    protected override void OnMouseClick(MouseEventArgs e) {
+      // Reacts to the Click on the Close Tab Button:
+      if (ShowTabCloseButton) {
+        Point p = e.Location;
+        for (int i = 0; i < TabCount; i++) {
+          Rectangle r = GetTabRect(i);
+          r.Offset(6, 8);
+          r.Width = 12;
+          r.Height = 12;
+          if (r.Contains(p)) {
+            CloseTab(i);
+          }
+        }
+      }
+    }
+    protected override void OnMouseMove(MouseEventArgs e) {
+      /* Hightlighs the Close Button when the Mouse is over it  */
+      if (ShowTabCloseButton) {
+        Point p = e.Location;
+        for (int i = 0; i < TabCount; i++) {
+          Rectangle r = GetTabRect(i);
+          r.Offset(6, 8);
+          r.Width = 12;
+          r.Height = 12;
+
+          OverCloseTab = r.Contains(p); //<- Mouse is over the Close button
+
+          if (OverCloseTab) {
+            DrawTab(this.CreateGraphics(), this.TabPages[i], i);
+          } else {
+            if (TabCloseColor == Color.Red) {
+              DrawTab(this.CreateGraphics(), this.TabPages[i], i);
+            }
+          }
+        }
+      }
+      //base.OnMouseMove(e);
+    }
+    protected override void OnPaint(PaintEventArgs e) {
+      base.OnPaint(e);
+      DrawControl(e.Graphics);
+    }
+    private void CloseTab(int i) {
+      if (PreRemoveTabPage != null) {
+        bool closeIt = PreRemoveTabPage(i);
+        if (!closeIt)
+          return;
+      }
+      TabPages.Remove(TabPages[i]);
     }
   }
 }

@@ -4,49 +4,42 @@ using System.Windows.Forms;
 
 namespace DarkModeForms {
   public class FlatProgressBar : ProgressBar {
+    private Color BarColor = Color.Green;
+    private int max = 100;
+    private int min = 0;
+    // Minimum value for progress range
+    // Maximum value for progress range
+    private int val = 0;
+
     public FlatProgressBar() {
       this.SetStyle(ControlStyles.UserPaint, true);
       //this.SetStyle(ControlStyles.UserPaint | ControlStyles.AllPaintingInWmPaint, true);
     }
 
-    protected override void OnPaintBackground(PaintEventArgs pevent) {
-      // None... Helps control the flicker.
+    public int Maximum {
+      get {
+        return max;
+      }
+
+      set {
+        // Make sure that the maximum value is never set lower than the minimum value.
+        if (value < min) {
+          min = value;
+        }
+
+        max = value;
+
+        // Make sure that value is still in range.
+        if (val > max) {
+          val = max;
+        }
+
+        // Invalidate the control to get a repaint.
+        this.Invalidate();
+      }
     }
 
-    private int min = 0;// Minimum value for progress range
-    private int max = 100;// Maximum value for progress range
-    private int val = 0;// Current progress
-    private Color BarColor = Color.Green;// Color of progress meter
-
-    protected override void OnResize(EventArgs e) {
-      // Invalidate the control to get a repaint.
-      this.Invalidate();
-    }
-
-    protected override void OnPaint(PaintEventArgs e) {
-      Graphics g = e.Graphics;
-      SolidBrush brush = new SolidBrush(BarColor);
-      Brush BackBrush = new SolidBrush(this.BackColor);
-
-      float percent = (float)(val - min) / (float)(max - min);
-      Rectangle rect = this.ClientRectangle;
-
-      // Calculate area for drawing the progress.
-      rect.Width = (int)((float)rect.Width * percent);
-
-      g.FillRectangle(BackBrush, this.ClientRectangle); //Draw the brackgound
-      g.FillRectangle(brush, rect); // Draw the progress meter.
-                                    //ProgressBarRenderer.DrawHorizontalBar(g, rect);
-
-      // Draw a three-dimensional border around the control.
-      Draw3DBorder(g);
-
-      // Clean up.
-      brush.Dispose();
-      g.Dispose();
-    }
-
-    public new int Minimum {
+    public int Minimum {
       get {
         return min;
       }
@@ -74,30 +67,20 @@ namespace DarkModeForms {
       }
     }
 
-    public new int Maximum {
+    public Color ProgressBarColor {
       get {
-        return max;
+        return BarColor;
       }
 
       set {
-        // Make sure that the maximum value is never set lower than the minimum value.
-        if (value < min) {
-          min = value;
-        }
-
-        max = value;
-
-        // Make sure that value is still in range.
-        if (val > max) {
-          val = max;
-        }
+        BarColor = value;
 
         // Invalidate the control to get a repaint.
         this.Invalidate();
       }
     }
 
-    public new int Value {
+    public int Value {
       get {
         return val;
       }
@@ -146,19 +129,39 @@ namespace DarkModeForms {
       }
     }
 
-    public Color ProgressBarColor {
-      get {
-        return BarColor;
-      }
+    protected override void OnPaint(PaintEventArgs e) {
+      Graphics g = e.Graphics;
+      SolidBrush brush = new SolidBrush(BarColor);
+      Brush BackBrush = new SolidBrush(this.BackColor);
 
-      set {
-        BarColor = value;
+      float percent = (float)(val - min) / (float)(max - min);
+      Rectangle rect = this.ClientRectangle;
 
-        // Invalidate the control to get a repaint.
-        this.Invalidate();
-      }
+      // Calculate area for drawing the progress.
+      rect.Width = (int)((float)rect.Width * percent);
+
+      g.FillRectangle(BackBrush, this.ClientRectangle); //Draw the brackgound
+      g.FillRectangle(brush, rect); // Draw the progress meter.
+                                    //ProgressBarRenderer.DrawHorizontalBar(g, rect);
+
+      // Draw a three-dimensional border around the control.
+      Draw3DBorder(g);
+
+      // Clean up.
+      brush.Dispose();
+      g.Dispose();
+    }
+    protected override void OnPaintBackground(PaintEventArgs pevent) {
+      // None... Helps control the flicker.
     }
 
+// Current progress
+    // Color of progress meter
+
+    protected override void OnResize(EventArgs e) {
+      // Invalidate the control to get a repaint.
+      this.Invalidate();
+    }
     private void Draw3DBorder(Graphics g) {
       int PenWidth = (int)Pens.White.Width;
 

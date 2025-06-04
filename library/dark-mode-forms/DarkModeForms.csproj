@@ -12,7 +12,7 @@
     <DebugType>none</DebugType>
     <ImplicitUsings>disable</ImplicitUsings>
     <!-- CS0169, CS0184, CS86XX: Warning from original source -->
-    <NoWarn>$(NoWarn);WFO5001;WPF0001;CS0169;CS0184;CS8600;CS8601;CS8602;CS8603;CS8618;CS8625</NoWarn>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001;CS0108;CS0169;CS0184;CS8600;CS8601;CS8602;CS8603;CS8618;CS8625</NoWarn>
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
