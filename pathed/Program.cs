@@ -3,6 +3,7 @@ using CommandLine.Text;
 using Pathed.Libraries;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 
 namespace Pathed;
@@ -41,13 +42,24 @@ internal static class Program {
   }
 
   private static int DisplayHelp<T>(ParserResult<T> result, IEnumerable<Error> errs) {
-    HelpText? helpText = null;
     if (errs.IsVersion()) {
-      helpText = HelpText.AutoBuild(result);
+      // print version information directly, without using CommandLineParser
+      Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+      string name = asm.GetName().Name;
+      string version = asm.GetName().Version?.ToString() ?? "0.0.0.0";
+      Console.WriteLine($"{name} {version}");
+      return 1;
     } else {
-      helpText = HelpText.AutoBuild(result, h => HelpText.DefaultParsingErrorsHandler(result, h), e => e, true);
+      HelpText ht = HelpText.AutoBuild(result, ht => {
+        var h = HelpText.DefaultParsingErrorsHandler(result, ht);
+        h.Copyright = string.Empty;
+        h.AddDashesToOption = true;
+        h.AdditionalNewLineAfterOption = false;
+        h.MaximumDisplayWidth = Console.WindowWidth;
+        return h;
+      }, e => e, true);
+      Console.WriteLine(ht);
+      return 1;
     }
-    Console.WriteLine(helpText);
-    return 1;
   }
 }
