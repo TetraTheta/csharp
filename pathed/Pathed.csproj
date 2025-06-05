@@ -28,9 +28,6 @@
     <Title>Pathed</Title>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\library\output-colorizer\OutputColorizer.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="CommandLineParser" />
     <PackageReference Include="Costura.Fody" PrivateAssets="All" />
     <PackageReference Include="Fody" PrivateAssets="All">

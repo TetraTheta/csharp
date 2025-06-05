@@ -5,10 +5,6 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pathed", "Pathed.csproj", "{B98738BE-3206-4AE6-B91B-74F6C46995A1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C8D5274F-AC00-46C7-1F8D-E88E81087A52}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OutputColorizer", "..\library\output-colorizer\OutputColorizer.csproj", "{EC48C23E-A726-412E-8AD5-B7AC06DEB365}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,16 +15,9 @@ Global
 		{B98738BE-3206-4AE6-B91B-74F6C46995A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B98738BE-3206-4AE6-B91B-74F6C46995A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B98738BE-3206-4AE6-B91B-74F6C46995A1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EC48C23E-A726-412E-8AD5-B7AC06DEB365}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EC48C23E-A726-412E-8AD5-B7AC06DEB365}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EC48C23E-A726-412E-8AD5-B7AC06DEB365}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EC48C23E-A726-412E-8AD5-B7AC06DEB365}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{EC48C23E-A726-412E-8AD5-B7AC06DEB365} = {C8D5274F-AC00-46C7-1F8D-E88E81087A52}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FC97710-7CB5-411D-92AF-7651C5130484}

@@ -1,4 +1,3 @@
-using OutputColorizer;
 using System;
 using System.Security.Principal;
 
@@ -16,7 +15,9 @@ public static class Runner {
   public static int Append(AppendOptions opt) {
     if (opt.Target == EnvironmentVariableTarget.Machine && !IsAdmin()) Elevate();
     if (opt.Target == EnvironmentVariableTarget.Process) {
-      Colorizer.WriteLine("[red!You cannot edit environment variable on Process target. It is temporary edit!]");
+      Console.ForegroundColor = ConsoleColor.Red;
+      Console.Error.WriteLine("You cannot edit environment variable on Process target. It is temporary edit!");
+      Console.ResetColor();
       return 1;
     }
     EnvPath envPath = new(opt.Key, opt.Target);
@@ -84,14 +85,14 @@ public static class Runner {
     return 0;
   }
 
-  private static bool IsAdmin() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
-
   // This doesn't actually create elevated process, but I'll use this name for later use.
   private static void Elevate() {
-    Colorizer.WriteLine("[red!Administrator privilege is required.]");
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.Error.WriteLine("Administrator privilege is required.");
+    Console.ResetColor();
     Environment.Exit(1);
   }
-
+  private static bool IsAdmin() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
   /**
    * TODO:
    * 1. When 'Elevate()' is called, create new named pipe with random name
