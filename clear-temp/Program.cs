@@ -16,7 +16,7 @@ internal class Program {
   private static void Main() {
     // Get absolute path of 'ClearTemp.txt'
     string currentDir = Path.Combine(Environment.CurrentDirectory, "ClearTemp.txt");
-    string binaryDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ClearTemp.txt");
+    string binaryDir = Path.Combine(AppContext.BaseDirectory, "ClearTemp.txt");
 
     string configFile;
     if (File.Exists(currentDir)) {
