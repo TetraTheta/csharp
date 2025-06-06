@@ -12,7 +12,7 @@ public class INI {
   private readonly string _filePath;
 
   public INI(string iniPath) {
-    string baseDir = AppDomain.CurrentDomain.BaseDirectory;
+    string baseDir = AppContext.BaseDirectory;
     _filePath = Path.Combine(baseDir, iniPath);
 
     _data = new(_nc);
@@ -25,8 +25,9 @@ public class INI {
     LoadFromFile();
   }
 
-  public string Get(string section, string key, string defaultValue) {
+  public string Get(string section, string key, string? defaultValue) {
     if (!_data.ContainsKey(section)) {
+      if (defaultValue == null) throw new MissingFieldException($"There is no default value of '{section}/{key}'");
       _data[section] = new(_nc) {
         [key] = defaultValue
       };
@@ -36,6 +37,7 @@ public class INI {
 
     var sectionDict = _data[section];
     if (!sectionDict.ContainsKey(key)) {
+      if (defaultValue == null) throw new MissingFieldException($"There is no default value of '{section}/{key}'");
       sectionDict[key] = defaultValue;
       WriteToFile();
       return defaultValue;
@@ -67,6 +69,7 @@ public class INI {
     if (sb.Length > 0 && sb[sb.Length - 1] == '\n') sb.Length--;
     return sb.ToString();
   }
+
   private void LoadFromFile() {
     string? currentSection = null;
     foreach (var rawLine in File.ReadAllLines(_filePath, Encoding.UTF8)) {
@@ -85,6 +88,7 @@ public class INI {
       }
     }
   }
+
   private void WriteToFile() {
     using StreamWriter writer = new(_filePath, false, Encoding.UTF8);
     foreach (var sectionPair in _data) {
