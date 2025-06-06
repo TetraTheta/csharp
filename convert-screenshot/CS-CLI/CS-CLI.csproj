@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <LangVersion>default</LangVersion>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CS_CLI</RootNamespace>
+    <TargetFramework>net48</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>none</DebugType>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <!-- Version Information -->
+  <PropertyGroup>
+    <AssemblyName>ConvertScreenshot</AssemblyName>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Company>TetraTheta</Company>
+    <Copyright>Copyright (c) TetraTheta All rights reserved</Copyright>
+    <Description>Convert game screenshot</Description>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+    <Product>ConvertScreenshot</Product>
+    <Title>ConvertScreenshot</Title>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="Costura.Fody" PrivateAssets="All" />
+    <PackageReference Include="Fody" PrivateAssets="All">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\library\configuration\Configuration.csproj" />
+    <ProjectReference Include="..\common\common.csproj" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="mkdir &quot;$(SolutionDir).bin\&quot;&#xD;&#xA;copy /B /Y &quot;$(TargetDir)*.exe&quot; &quot;$(SolutionDir).bin\$(TargetFileName)&quot;" />
+  </Target>
+</Project>

@@ -1,0 +1,207 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using CommandLine;
+using CommandLine.Text;
+using common;
+using Configuration;
+using Newtonsoft.Json;
+
+namespace CS_CLI;
+
+internal class Program {
+  private static readonly INI ini;
+
+  static Program() {
+    string name = Assembly.GetEntryAssembly().GetName().Name;
+    ini = new($"{name}.ini");
+
+    // prepare ini file
+    _ = ini.Get("General", "Folder_Background", "CS-Background");
+    _ = ini.Get("General", "Folder_Center", "CS-Center");
+    _ = ini.Get("General", "Folder_Foreground0", "CS-Foreground-0");
+    _ = ini.Get("General", "Folder_Foreground1", "CS-Foreground-1");
+    _ = ini.Get("General", "Folder_Foreground2", "CS-Foreground-2");
+    _ = ini.Get("General", "Folder_Foreground3", "CS-Foreground-3");
+    _ = ini.Get("General", "Folder_Foreground4", "CS-Foreground-4");
+    _ = ini.Get("General", "Folder_Full", "CS-Full");
+    _ = ini.Get("WuWa", "Crop_Background_Height", "360");
+    _ = ini.Get("WuWa", "Crop_Center_Height", "200");
+    _ = ini.Get("WuWa", "Crop_Foreground0_Height", "310");
+    _ = ini.Get("WuWa", "Crop_Foreground1_Height", "420");
+    _ = ini.Get("WuWa", "Crop_Foreground2_Height", "505");
+    _ = ini.Get("WuWa", "Crop_Foreground3_Height", "580");
+    _ = ini.Get("WuWa", "Crop_Foreground4_Height", "655");
+    _ = ini.Get("WuWa", "UID_Area", "144,22");
+    _ = ini.Get("WuWa", "UID_Position", "1744,1059");
+  }
+
+  private static int DisplayHelp<T>(ParserResult<T> result, IEnumerable<Error> errs) {
+    if (errs.IsVersion()) {
+      // print version information directly, without using CommandLineParser
+      Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
+      string name = asm.GetName().Name;
+      string version = asm.GetName().Version?.ToString() ?? "0.0.0.0";
+      Console.WriteLine($"{name} {version}");
+      return 1;
+    } else {
+      HelpText ht = HelpText.AutoBuild(result, ht => {
+        var h = HelpText.DefaultParsingErrorsHandler(result, ht);
+        h.Copyright = string.Empty;
+        h.AddDashesToOption = true;
+        h.AdditionalNewLineAfterOption = false;
+        h.MaximumDisplayWidth = Console.WindowWidth;
+        return h;
+      }, e => e, true);
+      Console.WriteLine(ht);
+      return 1;
+    }
+  }
+
+  private static void Main(string[] args) {
+    // parse command-line
+    var result = new Parser(c => {
+      c.HelpWriter = null;
+      c.CaseSensitive = false;
+      c.CaseInsensitiveEnumValues = true;
+      c.EnableDashDash = true;
+      c.MaximumDisplayWidth = Console.WindowWidth;
+    }).ParseArguments<Options>(args);
+
+    // command-line parse error: print help message and exit
+    result.WithNotParsed(e => DisplayHelp(result, e));
+
+    result.WithParsed(opt => {
+      // invalid value in Options: print error message and exit
+      if (!opt.Validate(out var err)) {
+        string prefix = "\x1b[91mERROR\x1b[0m";
+        foreach (string e in err) Console.Error.WriteLine($"{prefix} {e}");
+        Environment.Exit(1);
+      }
+
+      // use default value from INI file
+      switch (opt.Game) {
+        case Game.WuWa:
+          if (opt.UidArea == null || !opt.UidArea.Any()) opt.UidArea = ini.Get("WuWa", "UID_Area").Split(',').Select(uint.Parse);
+          if (opt.UidPos == null || !opt.UidPos.Any()) opt.UidPos = ini.Get("WuWa", "UID_Position").Split(',').Select(uint.Parse);
+          opt.WidthFrom ??= 1920;
+          opt.WidthTo ??= 1280;
+          switch (opt.Operation) {
+            case Operation.Background:
+              opt.CropPos ??= CropPosition.Bottom;
+              opt.CropHeight ??= uint.Parse(ini.Get("WuWa", "Crop_Background_Height"));
+              break;
+            case Operation.Center:
+              opt.CropPos ??= CropPosition.Center;
+              opt.CropHeight ??= uint.Parse(ini.Get("WuWa", "Crop_Center_Height"));
+              break;
+            case Operation.Foreground0:
+              opt.CropPos ??= CropPosition.Bottom;
+              opt.CropHeight ??= uint.Parse(ini.Get("WuWa", "Crop_Foreground0_Height"));
+              break;
+            case Operation.Foreground1:
+              opt.CropPos ??= CropPosition.Bottom;
+              opt.CropHeight ??= uint.Parse(ini.Get("WuWa", "Crop_Foreground1_Height"));
+              break;
+            case Operation.Foreground2:
+              opt.CropPos ??= CropPosition.Bottom;
+              opt.CropHeight ??= uint.Parse(ini.Get("WuWa", "Crop_Foreground2_Height"));
+              break;
+            case Operation.Foreground3:
+              opt.CropPos ??= CropPosition.Bottom;
+              opt.CropHeight ??= uint.Parse(ini.Get("WuWa", "Crop_Foreground3_Height"));
+              break;
+            case Operation.Foreground4:
+              opt.CropPos ??= CropPosition.Bottom;
+              opt.CropHeight ??= uint.Parse(ini.Get("WuWa", "Crop_Foreground4_Height"));
+              break;
+            case Operation.Full:
+              opt.CropPos ??= CropPosition.Full;
+              break;
+            default:
+              throw new InvalidOperationException();
+          }
+          break;
+        case Game.None:
+          opt.CropPos ??= CropPosition.Full;
+          break;
+        default:
+          throw new NotImplementedException();
+      }
+      // prepare JobData
+      switch (opt.Operation) {
+        case Operation.Background:
+          JobData jd_b = opt.ToJobData();
+          jd_b.SearchCandidate = ini.Get("General", "Folder_Background");
+
+          StartGUI(jd_b);
+          break;
+        case Operation.Center:
+          JobData jd_c = opt.ToJobData();
+          jd_c.SearchCandidate = ini.Get("General", "Folder_Center");
+
+          StartGUI(jd_c);
+          break;
+        case Operation.Foreground0:
+          JobData jd_f0 = opt.ToJobData();
+          jd_f0.SearchCandidate = ini.Get("General", "Folder_Foreground0");
+
+          StartGUI(jd_f0);
+          break;
+        case Operation.Foreground1:
+          JobData jd_f1 = opt.ToJobData();
+          jd_f1.SearchCandidate = ini.Get("General", "Folder_Foreground1");
+
+          StartGUI(jd_f1);
+          break;
+        case Operation.Foreground2:
+          JobData jd_f2 = opt.ToJobData();
+          jd_f2.SearchCandidate = ini.Get("General", "Folder_Foreground2");
+
+          StartGUI(jd_f2);
+          break;
+        case Operation.Foreground3:
+          JobData jd_f3 = opt.ToJobData();
+          jd_f3.SearchCandidate = ini.Get("General", "Folder_Foreground3");
+
+          StartGUI(jd_f3);
+          break;
+        case Operation.Foreground4:
+          JobData jd_f4 = opt.ToJobData();
+          jd_f4.SearchCandidate = ini.Get("General", "Folder_Foreground4");
+
+          StartGUI(jd_f4);
+          break;
+        case Operation.Full:
+          JobData jd_full = opt.ToJobData();
+          jd_full.SearchCandidate = ini.Get("General", "Folder_Full");
+
+          StartGUI(jd_full);
+          break;
+        default:
+          throw new InvalidOperationException();
+      }
+    });
+  }
+
+  private static void StartGUI(JobData jd) {
+    // launch GUI app and pass data via STDIN
+    ProcessStartInfo psi = new() {
+      FileName = Path.Combine(AppContext.BaseDirectory, "ConvertScreenshotGUI.exe"),
+      RedirectStandardInput = true,
+      UseShellExecute = false,
+      CreateNoWindow = true,
+    };
+
+    using Process p = Process.Start(psi);
+    if (p == null) {
+      Console.Error.WriteLine("Failed to start ConvertScreenshotGUI.exe");
+      return;
+    }
+    using StreamWriter w = p.StandardInput;
+    w.WriteLine(JsonConvert.SerializeObject(jd));
+  }
+}
