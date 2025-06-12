@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task: build:clear-temp
+      #- task: build:convert-screenshot
+      - task: build:custom-jump-list
+      - task: build:hammer-launcher
+      - task: build:markdown-helper
+      - task: build:new-folder
+      - task: build:pathed
+      - task: build:rcalc
+      - task: build:skip-uac
+  build:clear-temp:
+  build:convert-screenshot:
+  build:custom-jump-list:
+  build:hammer-launcher:
+  build:markdown-helper:
+  build:new-folder:
+  build:pathed:
+  build:rcalc:
+  build:skip-uac:
