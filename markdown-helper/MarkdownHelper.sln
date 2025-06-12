@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36127.28
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarkdownHelper", "MarkdownHelper.csproj", "{5ADE8F18-45BF-47D6-8E96-B44565C8740B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{C8D5274F-AC00-46C7-1F8D-E88E81087A52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DarkModeForms", "..\library\dark-mode-forms\DarkModeForms.csproj", "{52F94451-7892-1962-2CE1-1C53699C3D2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrayHotkey", "..\library\tray-hotkey\TrayHotkey.csproj", "{D2EF2F5E-62AA-E748-7C3D-D50550618BB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5ADE8F18-45BF-47D6-8E96-B44565C8740B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5ADE8F18-45BF-47D6-8E96-B44565C8740B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5ADE8F18-45BF-47D6-8E96-B44565C8740B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5ADE8F18-45BF-47D6-8E96-B44565C8740B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52F94451-7892-1962-2CE1-1C53699C3D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52F94451-7892-1962-2CE1-1C53699C3D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52F94451-7892-1962-2CE1-1C53699C3D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52F94451-7892-1962-2CE1-1C53699C3D2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2EF2F5E-62AA-E748-7C3D-D50550618BB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2EF2F5E-62AA-E748-7C3D-D50550618BB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2EF2F5E-62AA-E748-7C3D-D50550618BB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2EF2F5E-62AA-E748-7C3D-D50550618BB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{52F94451-7892-1962-2CE1-1C53699C3D2C} = {C8D5274F-AC00-46C7-1F8D-E88E81087A52}
+		{D2EF2F5E-62AA-E748-7C3D-D50550618BB7} = {C8D5274F-AC00-46C7-1F8D-E88E81087A52}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {869B411C-D39C-4C68-BB70-1E35064ECEDC}
+	EndGlobalSection
+EndGlobal
