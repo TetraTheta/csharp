@@ -193,6 +193,7 @@ namespace HammerLauncher.Forms {
       this.Name = "Launcher";
       this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
       this.Text = "Hammer Launcher";
+      this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Launcher_KeyDown);
       ((System.ComponentModel.ISupportInitialize)(this.picHL2)).EndInit();
       ((System.ComponentModel.ISupportInitialize)(this.picGMod)).EndInit();
       this.statusStrip.ResumeLayout(false);

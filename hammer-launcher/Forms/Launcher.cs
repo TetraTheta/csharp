@@ -136,4 +136,16 @@ public partial class Launcher : Form {
     tooltipGModHPP.Hide(btnGModHPP);
     statusLabel.Text = string.Empty;
   }
+
+  private void Launcher_KeyDown(object sender, KeyEventArgs e) {
+    if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1) {
+      btnHL2H.PerformClick();
+    } else if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2) {
+      btnHL2HPP.PerformClick();
+    } else if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3) {
+      btnGModH.PerformClick();
+    } else if (e.KeyCode == Keys.D4 || e.KeyCode == Keys.NumPad4) {
+      btnGModHPP.PerformClick();
+    }
+  }
 }
