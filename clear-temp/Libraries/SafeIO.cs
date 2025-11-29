@@ -4,6 +4,7 @@ using System.Linq;
 
 namespace ClearTemp.Libraries;
 
+// ReSharper disable once InconsistentNaming
 public static class SafeIO {
   public static IEnumerable<string> EnumerateFiles(string path) {
     try {

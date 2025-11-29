@@ -1,8 +1,8 @@
-using ClearTemp.Libraries;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using ClearTemp.Libraries;
 
 namespace ClearTemp;
 
@@ -12,20 +12,15 @@ internal static class Program {
     string binaryDir = Path.Combine(AppContext.BaseDirectory, "ClearTemp.txt");
 
     string configFile;
-    if (File.Exists(currentDir)) {
-      configFile = Path.GetFullPath(currentDir);
-    } else if (File.Exists(binaryDir)) {
-      configFile = Path.GetFullPath(binaryDir);
-    } else {
-      throw new FileNotFoundException("'ClearTemp.txt' is not found");
-    }
+    if (File.Exists(currentDir)) configFile = Path.GetFullPath(currentDir);
+    else if (File.Exists(binaryDir)) configFile = Path.GetFullPath(binaryDir);
+    else throw new FileNotFoundException("'ClearTemp.txt' is not found");
 
     string[] lines = File.ReadAllLines(configFile);
     IEnumerable<ConfigEntry> entries = ConfigParser.Parse(lines);
 
     foreach (ConfigEntry? entry in entries) {
-      IEnumerable<string> matchedDir =
-        PathExpander.Expand(entry.PathPattern).Distinct(StringComparer.OrdinalIgnoreCase);
+      IEnumerable<string> matchedDir = PathExpander.Expand(entry.PathPattern).Distinct(StringComparer.OrdinalIgnoreCase);
       foreach (string? dir in matchedDir) {
         Console.WriteLine();
         ConsolePrinter.PrintResult(ResultKind.Info, dir);
