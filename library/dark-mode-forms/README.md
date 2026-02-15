@@ -9,12 +9,12 @@ Original License: MIT license
 ### DarkModeForms
 
 ```csharp
-private DarkModeCS dm = null;
+private DarkModeForm dm = null;
 
 public Form1()
 {
   InitializeComponent();
-  dm = new DarkModeCS(this) {
+  dm = new DarkModeForm(this, null) {
     //[Optional] Choose your preferred color mode here:
     ColorMode = DarkModeCS.DisplayMode.SystemDefault
   };

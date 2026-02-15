@@ -1,8 +1,7 @@
 using System;
 using System.IO;
 
-namespace ClearTemp.Libraries;
-
+namespace ClearTemp.Libraries {
 public static class Remover {
   public static void Process(string path, PatternSet patterns, RemoveOption option) {
     if (!Directory.Exists(path)) return;
@@ -23,34 +22,28 @@ public static class Remover {
   }
 
   private static void DeleteFilesInDirectory(string path, PatternSet patterns) {
-    foreach (string? file in SafeIO.EnumerateFiles(path)) {
+    foreach (string file in SafeIo.EnumerateFiles(path)) {
       try {
         if (!patterns.IsMatch(file)) continue;
         File.Delete(file);
         ConsolePrinter.PrintResult(ResultKind.Success, file);
-      } catch (Exception e) {
-        HandleException(e, file);
-      }
+      } catch (Exception e) { HandleException(e, file); }
     }
   }
 
   private static void ClearRecursive(string path, PatternSet patterns, bool deleteThisDir) {
     // Delete file in current dir
-    foreach (string? file in SafeIO.EnumerateFiles(path)) {
+    foreach (string file in SafeIo.EnumerateFiles(path)) {
       try {
         if (!patterns.IsMatch(file)) continue;
         File.Delete(file);
         ConsolePrinter.PrintResult(ResultKind.Success, file);
-      } catch (Exception e) {
-        HandleException(e, file);
-      }
+      } catch (Exception e) { HandleException(e, file); }
     }
 
     // Recurse into subdirectories
-    foreach (string? sub in SafeIO.EnumerateDirectories(path)) {
-      try {
-        ClearRecursive(sub, patterns, true);
-      } catch {
+    foreach (string sub in SafeIo.EnumerateDirectories(path)) {
+      try { ClearRecursive(sub, patterns, true); } catch {
         // ignored
       }
     }
@@ -59,17 +52,15 @@ public static class Remover {
     try {
       Directory.Delete(path);
       ConsolePrinter.PrintResult(ResultKind.Success, path);
-    } catch (Exception e) {
-      HandleException(e, path);
-    }
+    } catch (Exception e) { HandleException(e, path); }
   }
 
   private static void HandleException(Exception e, string path) {
-    switch (e) {
-      case IOException:
+    switch (e.GetBaseException()) {
+      case IOException _:
         ConsolePrinter.PrintResult(ResultKind.Locked, path);
         break;
-      case UnauthorizedAccessException:
+      case UnauthorizedAccessException _:
         ConsolePrinter.PrintResult(ResultKind.NoPerm, path);
         break;
       default:
@@ -78,4 +69,5 @@ public static class Remover {
         break;
     }
   }
+}
 }

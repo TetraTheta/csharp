@@ -1,7 +1,7 @@
 @echo off
 cd "%~dp0"
-@REM Remove .bin, .obj, .vs
-for /d /r %%i in (.bin .obj .vs) do (
+@REM Remove .bin, .obj, .vs, bin, obj, packages
+for /d /r %%i in (.bin .obj .vs bin obj packages) do (
   if exist "%%i" (
     echo Deleting %%i
     rd /s /q "%%i"

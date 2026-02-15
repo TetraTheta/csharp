@@ -7,159 +7,158 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Pathed.Libraries;
+namespace Pathed.Libraries {
+public sealed class EnvPath {
+  private const uint FileFlagBackupSemantics = 0x02000000;
+  private const uint FileNameNormalized = 0x0;
 
-public class EnvPath(string key, EnvironmentVariableTarget evTarget) {
-  private const uint FILE_FLAG_BACKUP_SEMANTICS = 0x02000000;
-  private const uint FILE_NAME_NORMALIZED = 0x0;
-  private readonly string key = key;
-  private readonly string target = evTarget.ToString();
-  private string[] paths = [.. Environment.GetEnvironmentVariable(key, evTarget).Split([';'], StringSplitOptions.RemoveEmptyEntries).Select(path => path.Replace(";", ""))];
+  private readonly string _key;
+  private readonly EnvironmentVariableTarget _target;
+  private List<string> _paths;
 
-  public void Append(string value) {
-    string realValue;
-    try {
-      realValue = GetFullPath(value);
-    } catch (Win32Exception) {
-      Console.ForegroundColor = ConsoleColor.Red;
-      Console.WriteLine($"Failed to get full path of '{value}'");
-      Console.ResetColor();
-      realValue = value;
+  public EnvPath(string key, EnvironmentVariableTarget target) {
+    this._key = key;
+    this._target = target;
+
+    string raw = Environment.GetEnvironmentVariable(key, target) ?? string.Empty;
+    _paths = raw.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+  }
+
+  public int Append(string value) {
+    string normalized;
+    try { normalized = Normalize(value); } catch (Win32Exception) {
+      WriteError($"Failed to get full path of '{value}'.");
+      return 1;
     }
-    if (paths.Contains(realValue, StringComparer.OrdinalIgnoreCase)) paths = RemoveElementFromArray(paths, realValue, StringComparison.OrdinalIgnoreCase);
-    paths = [.. paths, realValue];
+
+    _paths.RemoveAll(p => string.Equals(p, normalized, StringComparison.OrdinalIgnoreCase));
+    _paths.Add(normalized);
     Show();
+    return 0;
   }
 
-  public void Prepend(string value) {
-    string realValue;
-    try {
-      realValue = GetFullPath(value);
-    } catch (Win32Exception) {
-      Console.ForegroundColor = ConsoleColor.Red;
-      Console.WriteLine($"Failed to get full path of '{value}'");
-      Console.ResetColor();
-      realValue = value;
+  public int Prepend(string value) {
+    string normalized;
+    try { normalized = Normalize(value); } catch (Win32Exception) {
+      WriteError($"Failed to get full path of '{value}'.");
+      return 1;
     }
-    if (paths.Contains(realValue, StringComparer.OrdinalIgnoreCase)) paths = RemoveElementFromArray(paths, realValue, StringComparison.OrdinalIgnoreCase);
-    paths = [realValue, .. paths];
+
+    _paths.RemoveAll(p => string.Equals(p, normalized, StringComparison.OrdinalIgnoreCase));
+    _paths.Insert(0, normalized);
     Show();
+    return 0;
   }
 
-  public void Remove(string value) {
-    paths = [.. paths.Where(x => !string.Equals(x, value, StringComparison.OrdinalIgnoreCase))];
+  public int Remove(string value) {
+    int removed = _paths.RemoveAll(p => string.Equals(p, value, StringComparison.OrdinalIgnoreCase));
+    if (removed == 0) return 1;
     Show();
+    return 0;
   }
 
-  public void Show() {
+  public int Show() {
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.Write("Environment Variable: ");
     Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine(key);
+    Console.WriteLine(_key);
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.Write("Variable Target: ");
     Console.ForegroundColor = ConsoleColor.Cyan;
-    Console.WriteLine(target);
+    Console.WriteLine(_target);
     Console.ForegroundColor = ConsoleColor.Yellow;
     Console.WriteLine("========================================");
     Console.ResetColor();
 
-    int pathsLength = Math.Max(2, (int)Math.Ceiling(Math.Log10(paths.Length + 1)));
-    for (int i = 0; i < paths.Length; i++) {
-      if (string.IsNullOrEmpty(paths[i])) continue;
-      string index = (i + 1).ToString().PadLeft(pathsLength, '0');
-      if (DoesExist(paths[i])) Console.WriteLine($"{index} {paths[i]}");
+    if (_paths.Count == 0) return 0;
+    int width = Math.Max(2, (int)Math.Ceiling(Math.Log10(_paths.Count + 1)));
+    for (int i = 0; i < _paths.Count; i++) {
+      string entry = _paths[i];
+      if (string.IsNullOrEmpty(entry)) continue;
+
+      string index = (i + 1).ToString().PadLeft(width, '0');
+      if (DoesExist(entry)) Console.WriteLine($"{index} {entry}");
       else {
         Console.ForegroundColor = ConsoleColor.Red;
-        Console.WriteLine($"{index} {paths[i]} [INVALID]");
+        Console.WriteLine($"{index} {entry} [INVALID]");
         Console.ResetColor();
       }
     }
+
+    return 0;
   }
 
-  public void Slim() {
-    HashSet<string> uniquePaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-    for (int i = 0; i < paths.Length; i++) {
-      if (string.IsNullOrEmpty(paths[i])) continue;
-      string expanded;
+  public int Slim() {
+    var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    var cleaned = new List<string>();
+
+    foreach (var p in _paths) {
+      if (string.IsNullOrWhiteSpace(p)) continue;
       try {
-        expanded = GetFullPath(paths[i]);
-        if (!DoesExist(expanded)) continue;
-        uniquePaths.Add(expanded);
-      } catch (Win32Exception) { continue; }
+        var full = Normalize(p);
+        if (!DoesExist(full)) continue;
+        if (seen.Add(full)) cleaned.Add(full);
+        // ReSharper disable once RedundantJumpStatement
+      } catch { continue; }
     }
-    paths = [.. uniquePaths];
+
+    _paths.Clear();
+    _paths.AddRange(cleaned);
     Show();
+    return 0;
   }
 
-  public void Sort() {
-    Array.Sort(paths, StringComparer.OrdinalIgnoreCase);
+  public int Sort() {
+    _paths.Sort(StringComparer.OrdinalIgnoreCase);
     Show();
+    return 0;
   }
 
   public override string ToString() {
-    string str = string.Join(";", paths);
-    if (str.StartsWith(";")) str = str.Substring(1);
-    if (!str.EndsWith(";")) str += ";";
-    return str;
+    if (_paths.Count == 0) return string.Empty;
+    return string.Join(";", _paths) + ";";
+  }
+
+  private static void WriteError(string message) {
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.Error.WriteLine(message);
+    Console.ResetColor();
+  }
+
+  private static string Normalize(string path) {
+    string expanded = Environment.ExpandEnvironmentVariables(path);
+    return GetFinalPathName(expanded);
   }
 
   // Some dirty jobs for disabling File System Redirection
   private static string GetFinalPathName(string dirtyPath) {
-    // Check first with File System Redirection disabled
-    IntPtr wow64Value = IntPtr.Zero;
-    Wow64DisableWow64FsRedirection(ref wow64Value);
-    SafeFileHandle directoryHandle = CreateFile(dirtyPath, 0, FileShare.ReadWrite | FileShare.Delete, IntPtr.Zero, FileMode.Open, (FileAttributes)FILE_FLAG_BACKUP_SEMANTICS, IntPtr.Zero);
-    if (directoryHandle.IsInvalid) {
-      // Check again with File System Redirection enabled
-      Wow64RevertWow64FsRedirection(wow64Value);
-      directoryHandle = CreateFile(dirtyPath, 0, FileShare.ReadWrite | FileShare.Delete, IntPtr.Zero, FileMode.Open, (FileAttributes)FILE_FLAG_BACKUP_SEMANTICS, IntPtr.Zero);
+    using (var handle = CreateFile(dirtyPath, 0, FileShare.ReadWrite | FileShare.Delete, IntPtr.Zero, FileMode.Open, (FileAttributes)FileFlagBackupSemantics, IntPtr.Zero)) {
+      if (handle.IsInvalid) throw new Win32Exception(Marshal.GetLastWin32Error());
+      var sb = new StringBuilder(1024);
+      uint size = GetFinalPathNameByHandle(handle, sb, (uint)sb.Capacity, FileNameNormalized);
+      if (size == 0 || size > sb.Capacity) throw new Win32Exception(Marshal.GetLastWin32Error());
+      string result = sb.ToString();
+      return result.StartsWith(@"\\?\") ? result.Substring(4) : result;
     }
-    if (directoryHandle.IsInvalid) throw new Win32Exception(Marshal.GetLastWin32Error());
-    Wow64RevertWow64FsRedirection(wow64Value);
-    return GetFinalPathNameByHandle(directoryHandle);
   }
 
-  // Some dirty jobs for getting actual path
-  private static string GetFinalPathNameByHandle(SafeFileHandle fileHandle) {
-    StringBuilder outPath = new(1024);
-    var size = GetFinalPathNameByHandle(fileHandle, outPath, (uint)outPath.Capacity, FILE_NAME_NORMALIZED);
-    if (size == 0 || size > outPath.Capacity) throw new Win32Exception(Marshal.GetLastWin32Error());
-    if (outPath[0] == '\\' && outPath[1] == '\\' && outPath[2] == '?' && outPath[3] == '\\') return outPath.ToString(4, outPath.Length - 4);
-    return outPath.ToString();
-  }
-
-  private bool DoesExist(string path) {
-    // Check first with File System Redirection disabled
-    IntPtr wow64Value = IntPtr.Zero;
-    Wow64DisableWow64FsRedirection(ref wow64Value);
-    bool result;
-    string realPath = Expand(path); // No need to get full path
-    result = File.Exists(realPath) || Directory.Exists(realPath);
-    if (!result) {
-      // Check again with File System Redirection enabled
-      Wow64RevertWow64FsRedirection(wow64Value);
-      result = File.Exists(realPath) || Directory.Exists(realPath);
-    }
-    Wow64RevertWow64FsRedirection(wow64Value);
-    return result;
+  private static bool DoesExist(string path) {
+    string expanded = Environment.ExpandEnvironmentVariables(path);
+    return File.Exists(expanded) || Directory.Exists(expanded);
   }
 
   [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  private static extern SafeFileHandle CreateFile([MarshalAs(UnmanagedType.LPTStr)] string filename, [MarshalAs(UnmanagedType.U4)] FileAccess access, [MarshalAs(UnmanagedType.U4)] FileShare share, IntPtr securityAttributes, [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition, [MarshalAs(UnmanagedType.U4)] FileAttributes flagsAndAttributes, IntPtr templateFile);
+  private static extern SafeFileHandle CreateFile(
+    [MarshalAs(UnmanagedType.LPTStr)] string filename,
+    [MarshalAs(UnmanagedType.U4)] FileAccess access,
+    [MarshalAs(UnmanagedType.U4)] FileShare share,
+    IntPtr securityAttributes,
+    [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition,
+    [MarshalAs(UnmanagedType.U4)] FileAttributes flagsAndAttributes,
+    IntPtr templateFile
+  );
 
   [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
   private static extern uint GetFinalPathNameByHandle(SafeFileHandle hFile, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder lpszFilePath, uint cchFilePath, uint dwFlags);
-
-  [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  private static extern bool Wow64DisableWow64FsRedirection(ref IntPtr ptr);
-
-  [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  private static extern bool Wow64RevertWow64FsRedirection(IntPtr ptr);
-
-  // I'm lazy
-  private string Expand(string path) => Environment.ExpandEnvironmentVariables(path);
-  private string GetFullPath(string path) => GetFinalPathName(Expand(path));
-
-  private string[] RemoveElementFromArray(string[] arr, string elem, StringComparison comparisonType) => [.. arr.Where(e => !e.Equals(elem, comparisonType))];
+}
 }

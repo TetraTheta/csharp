@@ -4,37 +4,31 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Pathed.Libraries;
-
+namespace Pathed.Libraries {
 [Verb("append", HelpText = "Append variable to environment variable")]
 public class AppendOptions {
   [Usage(ApplicationAlias = "Pathed.exe")]
   public static IEnumerable<Example> Examples {
     get {
-      yield return new Example("Append '%LocalAppData%\\Program\\MyProgram' to 'PATH' in User", new AppendOptions { Value = @"%LocalAppData%\Program\MyProgram", Key = "PATH" });
-      yield return new Example("Append 'C:\\Windows\\System32' to 'MyPath' in Machine", new AppendOptions { Value = @"C:\Windows\System32", Key = "MyPath", Target = EnvironmentVariableTarget.Machine });
+      yield return new Example(@"Append '%LocalAppData%\Program\MyProgram' to 'PATH' in User", new AppendOptions { Value = @"%LocalAppData%\Program\MyProgram", Key = "PATH" });
+      yield return new Example(@"Append 'C:\Windows\System32' to 'MyPath' in Machine", new AppendOptions { Value = @"C:\Windows\System32", Key = "MyPath", Target = EnvironmentVariableTarget.Machine });
     }
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; set; } = "PATH";
-
-  // This is for named pipe
-  [Option('p', "pipe", Default = "", Hidden = true)]
-  public string Pipe { get; set; } = "";
+  public string Key { get; private set; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; set; }
+  public EnvironmentVariableTarget Target { get; private set; }
 
   [Value(0, MetaName = "VAR", HelpText = "New variable to add to the end of the environment variable", Required = true)]
-  public string Value { get; set; } = "";
+  public string Value { get; private set; } = "";
 
   public override string ToString() {
-    StringBuilder sb = new();
+    StringBuilder sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Value: {Value}");
     sb.AppendLine($"Target: {Target}");
-    sb.AppendLine($"Pipe: {Pipe}");
     return sb.ToString();
   }
 }
@@ -44,30 +38,25 @@ public class PrependOptions {
   [Usage(ApplicationAlias = "Pathed.exe")]
   public static IEnumerable<Example> Examples {
     get {
-      yield return new Example("Prepend '%LocalAppData%\\Program\\MyProgram' to 'PATH' in User", new PrependOptions { Value = @"%LocalAppData%\Program\MyProgram", Key = "PATH" });
-      yield return new Example("Prepend 'C:\\Windows\\System32' to 'MyPath' in Machine", new PrependOptions { Value = @"C:\Windows\System32", Key = "MyPath", Target = EnvironmentVariableTarget.Machine });
+      yield return new Example(@"Prepend '%LocalAppData%\Program\MyProgram' to 'PATH' in User", new PrependOptions { Value = @"%LocalAppData%\Program\MyProgram", Key = "PATH" });
+      yield return new Example(@"Prepend 'C:\Windows\System32' to 'MyPath' in Machine", new PrependOptions { Value = @"C:\Windows\System32", Key = "MyPath", Target = EnvironmentVariableTarget.Machine });
     }
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; set; } = "PATH";
-
-  // This is for named pipe
-  [Option('p', "pipe", Default = "", Hidden = true)]
-  public string Pipe { get; set; } = "";
+  public string Key { get; private set; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
   public EnvironmentVariableTarget Target { get; set; }
 
   [Value(0, MetaName = "VAR", HelpText = "New variable to add to the front of the environment variable", Required = true)]
-  public string Value { get; set; } = "";
+  public string Value { get; private set; } = "";
 
   public override string ToString() {
-    StringBuilder sb = new();
+    StringBuilder sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Value: {Value}");
     sb.AppendLine($"Target: {Target}");
-    sb.AppendLine($"Pipe: {Pipe}");
     return sb.ToString();
   }
 }
@@ -77,17 +66,13 @@ public class RemoveOptions {
   [Usage(ApplicationAlias = "Pathed.exe")]
   public static IEnumerable<Example> Examples {
     get {
-      yield return new Example("Remove '%LocalAppData%\\Program\\MyProgram' from 'PATH' in User", new RemoveOptions { Value = @"%LocalAppData%\Program\MyProgram", Key = "PATH" });
-      yield return new Example("Remove 'C:\\Windows\\System32' from 'MyPath' in Machine", new RemoveOptions { Value = @"C:\Windows\System32", Key = "MyPath", Target = EnvironmentVariableTarget.Machine });
+      yield return new Example(@"Remove '%LocalAppData%\Program\MyProgram' from 'PATH' in User", new RemoveOptions { Value = @"%LocalAppData%\Program\MyProgram", Key = "PATH" });
+      yield return new Example(@"Remove 'C:\Windows\System32' from 'MyPath' in Machine", new RemoveOptions { Value = @"C:\Windows\System32", Key = "MyPath", Target = EnvironmentVariableTarget.Machine });
     }
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
   public string Key { get; set; } = "PATH";
-
-  // This is for named pipe
-  [Option('p', "pipe", Default = "", Hidden = true)]
-  public string Pipe { get; set; } = "";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
   public EnvironmentVariableTarget Target { get; set; }
@@ -96,11 +81,10 @@ public class RemoveOptions {
   public string Value { get; set; } = "";
 
   public override string ToString() {
-    StringBuilder sb = new();
+    StringBuilder sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Value: {Value}");
     sb.AppendLine($"Target: {Target}");
-    sb.AppendLine($"Pipe: {Pipe}");
     return sb.ToString();
   }
 }
@@ -116,20 +100,15 @@ public class ShowOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; set; } = "PATH";
-
-  // This is for named pipe
-  [Option('p', "pipe", Default = "", Hidden = true)]
-  public string Pipe { get; set; } = "";
+  public string Key { get; private set; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", HelpText = "", Default = EnvironmentVariableTarget.User)]
   public EnvironmentVariableTarget Target { get; set; }
 
   public override string ToString() {
-    StringBuilder sb = new();
+    StringBuilder sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Target: {Target}");
-    sb.AppendLine($"Pipe: {Pipe}");
     return sb.ToString();
   }
 }
@@ -147,18 +126,13 @@ public class SlimOptions {
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
   public string Key { get; set; } = "PATH";
 
-  // This is for named pipe
-  [Option('p', "pipe", Default = "", Hidden = true)]
-  public string Pipe { get; set; } = "";
-
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; set; }
+  public EnvironmentVariableTarget Target { get; private set; }
 
   public override string ToString() {
-    StringBuilder sb = new();
+    StringBuilder sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Target: {Target}");
-    sb.AppendLine($"Pipe: {Pipe}");
     return sb.ToString();
   }
 }
@@ -174,20 +148,16 @@ public class SortOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; set; } = "PATH";
-
-  // This is for named pipe
-  [Option('p', "pipe", Default = "", Hidden = true)]
-  public string Pipe { get; set; } = "";
+  public string Key { get; private set; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
   public EnvironmentVariableTarget Target { get; set; }
 
   public override string ToString() {
-    StringBuilder sb = new();
+    StringBuilder sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Target: {Target}");
-    sb.AppendLine($"Pipe: {Pipe}");
     return sb.ToString();
   }
+}
 }

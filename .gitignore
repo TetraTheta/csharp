@@ -1,5 +1,5 @@
-# Created by https://www.toptal.com/developers/gitignore/api/git,csharp,intellij+all,visualstudio,visualstudiocode,archive
-# Edit at https://www.toptal.com/developers/gitignore?templates=git,csharp,intellij+all,visualstudio,visualstudiocode,archive
+# Created by https://www.toptal.com/developers/gitignore/api/windows,linux,macos,csharp,git,intellij+all,visualstudio,visualstudiocode,archive,archives
+# Edit at https://www.toptal.com/developers/gitignore?templates=windows,linux,macos,csharp,git,intellij+all,visualstudio,visualstudiocode,archive,archives
 
 ### Archive ###
 
@@ -39,6 +39,31 @@
 # Ruby Package
 *.gem
 
+
+### Archives ###
+# It's better to unpack these files and commit the raw source because
+# git has its own built in compression methods.
+*.7z
+*.jar
+*.rar
+*.zip
+*.gz
+*.gzip
+*.tgz
+*.bzip
+*.bzip2
+*.bz2
+*.xz
+*.lzma
+*.cab
+*.xar
+
+# Packing-only formats
+
+# Package management formats
+*.dmg
+*.egg
+*.txz
 
 ### Csharp ###
 ## Ignore Visual Studio temporary files, build results, and
@@ -429,7 +454,6 @@ FodyWeavers.xsd
 .history/
 
 # Windows Installer files from build outputs
-*.cab
 *.msix
 
 # JetBrains Rider
@@ -484,14 +508,14 @@ FodyWeavers.xsd
 # When using Gradle or Maven with auto-import, you should exclude module files,
 # since they will be recreated, and may cause churn.  Uncomment if using
 # auto-import.
-# .idea/artifacts
-# .idea/compiler.xml
-# .idea/jarRepositories.xml
-# .idea/modules.xml
-# .idea/*.iml
-# .idea/modules
-# *.iml
-# *.ipr
+.idea/artifacts
+.idea/compiler.xml
+.idea/jarRepositories.xml
+.idea/modules.xml
+.idea/*.iml
+.idea/modules
+*.iml
+*.ipr
 
 # CMake
 cmake-build-*/
@@ -538,6 +562,53 @@ fabric.properties
 !.idea/codeStyles
 !.idea/runConfigurations
 
+### Linux ###
+
+# temporary files which can be created if a process still has a handle open of a deleted file
+.fuse_hidden*
+
+# KDE directory preferences
+.directory
+
+# Linux trash folder which might appear on any partition or disk
+.Trash-*
+
+# .nfs files are created when an open file is removed but is still being accessed
+.nfs*
+
+### macOS ###
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+### macOS Patch ###
+# iCloud generated files
+*.icloud
+
 ### VisualStudioCode ###
 !.vscode/*.code-snippets
 
@@ -550,6 +621,27 @@ fabric.properties
 # Ignore all local history of files
 .history
 .ionide
+
+### Windows ###
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+
+# Windows shortcuts
+*.lnk
 
 ### VisualStudio ###
 
@@ -732,7 +824,7 @@ fabric.properties
 ### VisualStudio Patch ###
 # Additional files built by Visual Studio
 
-# End of https://www.toptal.com/developers/gitignore/api/git,csharp,intellij+all,visualstudio,visualstudiocode,archive
+# End of https://www.toptal.com/developers/gitignore/api/windows,linux,macos,csharp,git,intellij+all,visualstudio,visualstudiocode,archive,archives
 
 # Visual Studio
 .bin
@@ -740,6 +832,5 @@ fabric.properties
 .obj
 .release
 
-# Archive
-.7z
-.rar
+# IntelliJ IDEA (missing elements)
+.idea/

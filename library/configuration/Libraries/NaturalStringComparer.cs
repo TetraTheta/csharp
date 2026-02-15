@@ -1,43 +1,42 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text.RegularExpressions;
 
-namespace Configuration.Libraries;
+namespace Configuration.Libraries {
+  public class NaturalStringComparer : IComparer<string> {
+    private static readonly Regex Chunker = new Regex(@"\d+|\D+", RegexOptions.Compiled);
 
-public class NaturalStringComparer : IComparer<string> {
-  private static readonly Regex _chunker = new(@"\d+|\D+", RegexOptions.Compiled);
+    public int Compare(string x, string y) {
+      if (ReferenceEquals(x, y)) return 0;
+      if (x == null) return -1;
+      if (y == null) return 1;
 
-  public int Compare(string? x, string? y) {
-    if (ReferenceEquals(x, y)) return 0;
-    if (x == null) return -1;
-    if (y == null) return 1;
+      MatchCollection xChunks = Chunker.Matches(x);
+      MatchCollection yChunks = Chunker.Matches(y);
 
-    MatchCollection xChunks = _chunker.Matches(x);
-    MatchCollection yChunks = _chunker.Matches(y);
+      int chunkCount = Math.Min(xChunks.Count, yChunks.Count);
 
-    int chunkCount = Math.Min(xChunks.Count, yChunks.Count);
+      for (int i = 0; i < chunkCount; i++) {
+        string xChunk = xChunks[i].Value;
+        string yChunk = yChunks[i].Value;
 
-    for (int i = 0; i < chunkCount; i++) {
-      string xChunk = xChunks[i].Value;
-      string yChunk = yChunks[i].Value;
+        bool isXNumber = char.IsDigit(xChunk[0]);
+        bool isYNumber = char.IsDigit(yChunk[0]);
 
-      bool isXNumber = char.IsDigit(xChunk[0]);
-      bool isYNumber = char.IsDigit(yChunk[0]);
+        int cmp;
 
-      int cmp;
-
-      if (isXNumber && isYNumber) {
-        var xNum = BigInteger.Parse(xChunk);
-        var yNum = BigInteger.Parse(yChunk);
-        cmp = xNum.CompareTo(yNum);
-        if (cmp != 0) return cmp;
-      } else {
-        cmp = string.Compare(xChunk, yChunk, StringComparison.OrdinalIgnoreCase);
+        if (isXNumber && isYNumber) {
+          var xNum = BigInteger.Parse(xChunk);
+          var yNum = BigInteger.Parse(yChunk);
+          cmp = xNum.CompareTo(yNum);
+        } else {
+          cmp = string.Compare(xChunk, yChunk, StringComparison.OrdinalIgnoreCase);
+        }
         if (cmp != 0) return cmp;
       }
-    }
 
-    return xChunks.Count.CompareTo(yChunks.Count);
+      return xChunks.Count.CompareTo(yChunks.Count);
+    }
   }
 }

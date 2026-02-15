@@ -1,8 +1,7 @@
 using System;
 using System.IO;
 
-namespace ClearTemp.Libraries;
-
+namespace ClearTemp.Libraries {
 public enum ResultKind {
   Info,
   Success,
@@ -48,4 +47,5 @@ public static class ConsolePrinter {
     Console.WriteLine(name);
     Console.ResetColor();
   }
+}
 }

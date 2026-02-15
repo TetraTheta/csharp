@@ -1,63 +1,98 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
   <PropertyGroup>
-    <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
-    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
-    <LangVersion>default</LangVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{105ABD06-38D2-4FF0-8509-DECBD0B25D34}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net48</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DebugType>none</DebugType>
-    <ImplicitUsings>disable</ImplicitUsings>
-    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <!-- Version Information -->
-  <PropertyGroup>
+    <RootNamespace>HammerLauncher</RootNamespace>
     <AssemblyName>HammerLauncher</AssemblyName>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <Company>TetraTheta</Company>
-    <Copyright>Copyright (c) TetraTheta All rights reserved</Copyright>
-    <Description>Open Hammer Editor</Description>
-    <FileVersion>$(AssemblyVersion)</FileVersion>
-    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
-    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
-    <Product>HammerLauncher</Product>
-    <Title>HammerLauncher</Title>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32bit>false</Prefer32bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32bit>false</Prefer32bit>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\MainIcon.ico" />
-    <EmbeddedResource Include="Resources\game_gmod_32.png" />
-    <EmbeddedResource Include="Resources\game_gmod_gray_32.png" />
-    <EmbeddedResource Include="Resources\game_hl2_32.png" />
-    <EmbeddedResource Include="Resources\game_hl2_gray_32.png" />
-    <EmbeddedResource Include="Resources\hammer_gmod_32.png" />
-    <EmbeddedResource Include="Resources\hammer_hl2_32.png" />
-    <EmbeddedResource Include="Resources\hammer_hpp_32.png" />
+    <Reference Include="System"/>
+    <Reference Include="System.Core"/>
+    <Reference Include="System.Xml.Linq"/>
+    <Reference Include="System.Data.DataSetExtensions"/>
+    <Reference Include="Microsoft.CSharp"/>
+    <Reference Include="System.Data"/>
+    <Reference Include="System.Deployment"/>
+    <Reference Include="System.Drawing"/>
+    <Reference Include="System.Net.Http"/>
+    <Reference Include="System.Windows.Forms"/>
+    <Reference Include="System.Xml"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" PrivateAssets="All" />
-    <PackageReference Include="Fody" PrivateAssets="All">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\library\dark-mode-forms\DarkModeForms.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Resources\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
+    <Compile Include="Forms\Launcher.cs" />
+    <Compile Include="Forms\Launcher.Designer.cs">
+      <DependentUpon>Launcher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Libraries\Extension.cs" />
+    <Compile Include="Libraries\Hammer.cs" />
+    <Compile Include="Libraries\SteamRegistry.cs" />
+    <Compile Include="Program.cs"/>
+    <Compile Include="Properties\AssemblyInfo.cs"/>
+    <EmbeddedResource Include="Forms\Launcher.resx">
+      <DependentUpon>Launcher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Resources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <None Include=".editorconfig" />
+    <None Include="App.config"/>
+    <None Include="CodeMaid.config" />
+    <None Include="FodyWeavers.xml" />
+    <None Include="README.md" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\MainIcon.ico" />
+    <Content Include="Resources\game_gmod_32.png" />
+    <Content Include="Resources\game_gmod_gray_32.png" />
+    <Content Include="Resources\game_hl2_32.png" />
+    <Content Include="Resources\game_hl2_gray_32.png" />
+    <Content Include="Resources\hammer_gmod_32.png" />
+    <Content Include="Resources\hammer_hl2_32.png" />
+    <Content Include="Resources\hammer_hpp_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\library\dark-mode-forms\DarkModeForms.csproj">
+      <Project>{a7dd3bc3-1fc1-4802-99d7-7f9dfaefc7de}</Project>
+      <Name>DarkModeForms</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

@@ -1,65 +1,70 @@
-using CommandLine;
-using CommandLine.Text;
-using Pathed.Libraries;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+using CommandLine;
+using CommandLine.Text;
+using Pathed.Libraries;
 
-namespace Pathed;
-
-internal static class Program {
-
-  // For later use
-  public static string[]? arguments;
-
+namespace Pathed {
+public static class Program {
   public static int Main(string[] args) {
-    arguments = args;
     Console.OutputEncoding = Encoding.GetEncoding(Encoding.Default.CodePage);
 
-    Type[] _types = [
+    Type[] types = {
       typeof(AppendOptions),
       typeof(PrependOptions),
       typeof(RemoveOptions),
       typeof(ShowOptions),
       typeof(SlimOptions),
       typeof(SortOptions)
-    ];
+    };
 
-    var result = new Parser(c => {
-      c.HelpWriter = null;
-      c.CaseSensitive = false;
-      c.CaseInsensitiveEnumValues = true;
-    }).ParseArguments(args, _types);
-    result.WithParsed<AppendOptions>(opt => Runner.Append(opt));
-    result.WithParsed<PrependOptions>(opt => Runner.Prepend(opt));
-    result.WithParsed<RemoveOptions>(opt => Runner.Remove(opt));
-    result.WithParsed<ShowOptions>(opt => Runner.Show(opt));
-    result.WithParsed<SlimOptions>(opt => Runner.Slim(opt));
-    result.WithParsed<SortOptions>(opt => Runner.Sort(opt));
-    result.WithNotParsed(errs => DisplayHelp(result, errs));
-    return 0;
+    var parser = new Parser(cfg => {
+        cfg.HelpWriter = null;
+        cfg.CaseSensitive = false;
+        cfg.CaseInsensitiveEnumValues = true;
+      }
+    );
+    var result = parser.ParseArguments(args, types);
+
+    int exitCode = 0;
+
+    result.WithParsed<AppendOptions>(o => exitCode = Runner.Append(o));
+    result.WithParsed<PrependOptions>(o => exitCode = Runner.Prepend(o));
+    result.WithParsed<RemoveOptions>(o => exitCode = Runner.Remove(o));
+    result.WithParsed<ShowOptions>(o => exitCode = Runner.Show(o));
+    result.WithParsed<SlimOptions>(o => exitCode = Runner.Slim(o));
+    result.WithParsed<SortOptions>(o => exitCode = Runner.Sort(o));
+    result.WithNotParsed(errs => exitCode = DisplayHelp(result, errs));
+
+    return exitCode;
   }
 
   private static int DisplayHelp<T>(ParserResult<T> result, IEnumerable<Error> errs) {
     if (errs.IsVersion()) {
       // print version information directly, without using CommandLineParser
       Assembly asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-      string name = asm.GetName().Name;
-      string version = asm.GetName().Version?.ToString() ?? "0.0.0.0";
-      Console.WriteLine($"{name} {version}");
-      return 1;
-    } else {
-      HelpText ht = HelpText.AutoBuild(result, ht => {
+      Console.WriteLine($"{asm.GetName().Name} {asm.GetName().Version}");
+      return 0;
+    }
+
+    int width;
+    try { width = Console.WindowWidth; } catch { width = 80; }
+
+    HelpText help = HelpText.AutoBuild(
+      result, ht => {
         var h = HelpText.DefaultParsingErrorsHandler(result, ht);
         h.Copyright = string.Empty;
         h.AddDashesToOption = true;
         h.AdditionalNewLineAfterOption = false;
-        h.MaximumDisplayWidth = Console.WindowWidth;
+        h.MaximumDisplayWidth = width;
+
         return h;
-      }, e => e, true);
-      Console.WriteLine(ht);
-      return 1;
-    }
+      }, e => e, true
+    );
+    Console.WriteLine(help);
+    return 1;
   }
+}
 }

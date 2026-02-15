@@ -4,10 +4,12 @@ using System.IO;
 using System.Linq;
 using ClearTemp.Libraries;
 
-namespace ClearTemp;
+namespace ClearTemp {
+public static class Program {
+  public static void Main(string[] args) {
+    AppContext.SetSwitch("Switch.System.IO.BlockLongPaths", false);
+    AppContext.SetSwitch("Switch.System.IO.UseLegacyPathHandling", false);
 
-internal static class Program {
-  private static void Main() {
     string currentDir = Path.Combine(Environment.CurrentDirectory, "ClearTemp.txt");
     string binaryDir = Path.Combine(AppContext.BaseDirectory, "ClearTemp.txt");
 
@@ -19,9 +21,9 @@ internal static class Program {
     string[] lines = File.ReadAllLines(configFile);
     IEnumerable<ConfigEntry> entries = ConfigParser.Parse(lines);
 
-    foreach (ConfigEntry? entry in entries) {
+    foreach (ConfigEntry entry in entries) {
       IEnumerable<string> matchedDir = PathExpander.Expand(entry.PathPattern).Distinct(StringComparer.OrdinalIgnoreCase);
-      foreach (string? dir in matchedDir) {
+      foreach (string dir in matchedDir) {
         Console.WriteLine();
         ConsolePrinter.PrintResult(ResultKind.Info, dir);
         Remover.Process(dir, entry.Patterns, entry.Option);
@@ -32,4 +34,5 @@ internal static class Program {
     Console.WriteLine("Press any key to continue...");
     Console.ReadKey(true);
   }
+}
 }

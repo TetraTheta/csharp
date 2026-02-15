@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace ClearTemp.Libraries;
-
+namespace ClearTemp.Libraries {
 public static class PathExpander {
   private static readonly char Sep = Path.DirectorySeparatorChar;
 
@@ -18,16 +17,14 @@ public static class PathExpander {
 
     string rest = norm.Substring(root.Length).Trim(Sep);
 
-    string[] segments = rest.Length == 0 ? [] : rest.Split(Sep);
-    List<string> currentBases = new() { root.TrimEnd(Sep) + Sep };
+    string[] segments = rest.Length == 0 ? Array.Empty<string>() : rest.Split(Sep);
+    var currentBases = new List<string> { root.TrimEnd(Sep) + Sep };
 
     foreach (string seg in segments) {
-      List<string> next = new();
-      foreach (string? baseDir in currentBases) {
+      var next = new List<string>();
+      foreach (string baseDir in currentBases) {
         try {
-          if (seg.Contains("*")) {
-            next.AddRange(SafeIO.EnumerateDirectoriesWithPattern(baseDir, seg));
-          } else {
+          if (seg.Contains("*")) { next.AddRange(SafeIo.EnumerateDirectoriesWithPattern(baseDir, seg)); } else {
             string combined = Path.Combine(baseDir, seg);
             if (Directory.Exists(combined)) next.Add(combined);
           }
@@ -45,8 +42,7 @@ public static class PathExpander {
       yield break;
     }
 
-    foreach (string? d in currentBases.Where(Directory.Exists)) {
-      yield return d;
-    }
+    foreach (string d in currentBases.Where(Directory.Exists)) { yield return d; }
   }
+}
 }

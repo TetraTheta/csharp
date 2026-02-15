@@ -1,104 +1,91 @@
-using DarkModeForms;
 using HammerLauncher.Libraries;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
+using DarkModeForms;
+using HammerLauncher.Properties;
 
-namespace HammerLauncher.Forms;
-
+namespace HammerLauncher.Forms {
 public partial class Launcher : Form {
-  private readonly DarkModeCS dm;
+  private readonly string _hl2H = Hammer.GetHl2H();
+  private readonly string _hl2Hpp = Hammer.GetHl2Hpp();
+  private readonly string _gmodh = Hammer.GetGModH();
+  private readonly string _gmodhpp = Hammer.GetGModHpp();
 
-  private readonly string hl2h = Hammer.GetHL2H();
-  private readonly string hl2hpp = Hammer.GetHL2HPP();
-  private readonly string gmodh = Hammer.GetGModH();
-  private readonly string gmodhpp = Hammer.GetGModHPP();
-
-  private readonly string filePath = string.Empty;
+  private readonly string _filePath = string.Empty;
 
   public Launcher(string file) {
     InitializeComponent();
-    dm = new DarkModeCS(this);
+    DarkModeHelper.Apply(this);
 
     // Set Target
     if (!string.IsNullOrWhiteSpace(file)) {
-      filePath = Path.GetFullPath(file);
-      tbTarget.Text = filePath;
+      _filePath = Path.GetFullPath(file);
+      tbTarget.Text = _filePath;
       tbTarget.SelectEnd();
     }
 
     // Check HL2
-    if (string.IsNullOrWhiteSpace(Registry.GetHL2InstallPath())) DisableHL2();
+    if (string.IsNullOrWhiteSpace(SteamRegistry.GetHl2InstallPath())) DisableHl2();
 
     // Check HL2 Hammer
-    if (string.IsNullOrWhiteSpace(hl2h)) btnHL2H.Enabled = false;
+    if (string.IsNullOrWhiteSpace(_hl2H)) btnHL2H.Enabled = false;
 
     // Check HL2 Hammer++
-    if (string.IsNullOrWhiteSpace(hl2hpp)) btnHL2HPP.Enabled = false;
+    if (string.IsNullOrWhiteSpace(_hl2Hpp)) btnHL2HPP.Enabled = false;
 
     // Check GMod
-    if (string.IsNullOrWhiteSpace(Registry.GetGModInstallPath())) DisableGMod();
+    if (string.IsNullOrWhiteSpace(SteamRegistry.GetGModInstallPath())) DisableGMod();
 
     // Check GMod Hammer
-    if (string.IsNullOrWhiteSpace(gmodh)) btnGModH.Enabled = false;
+    if (string.IsNullOrWhiteSpace(_gmodh)) btnGModH.Enabled = false;
 
     // Check GMod Hammer++
-    if (string.IsNullOrWhiteSpace(gmodhpp)) btnGModHPP.Enabled = false;
+    if (string.IsNullOrWhiteSpace(_gmodhpp)) btnGModHPP.Enabled = false;
 
     // Select Form itself
     Select();
   }
 
-  private void DisableHL2() {
-    picHL2.Image = Resources.Resources.game_hl2_gray_32;
+  private void DisableHl2() {
+    picHL2.Image = Resources.game_hl2_gray_32;
     btnHL2H.Enabled = false;
     btnHL2HPP.Enabled = false;
   }
 
   private void DisableGMod() {
-    picGMod.Image = Resources.Resources.game_gmod_gray_32;
+    picGMod.Image = Resources.game_gmod_gray_32;
     btnGModH.Enabled = false;
     btnGModHPP.Enabled = false;
   }
 
   private void btnHL2H_Click(object sender, System.EventArgs e) {
-    if (string.IsNullOrWhiteSpace(filePath)) {
-      Process.Start(hl2h);
-    } else {
-      Process.Start(hl2h, $"\"{Path.GetFullPath(filePath)}\"");
-    }
+    if (string.IsNullOrWhiteSpace(_filePath)) { Process.Start(_hl2H); } else { Process.Start(_hl2H, $"\"{Path.GetFullPath(_filePath)}\""); }
+
     Application.Exit();
   }
 
   private void btnHL2HPP_Click(object sender, System.EventArgs e) {
-    if (string.IsNullOrWhiteSpace(filePath)) {
-      Process.Start(hl2hpp);
-    } else {
-      Process.Start(hl2hpp, $"\"{Path.GetFullPath(filePath)}\"");
-    }
+    if (string.IsNullOrWhiteSpace(_filePath)) { Process.Start(_hl2Hpp); } else { Process.Start(_hl2Hpp, $"\"{Path.GetFullPath(_filePath)}\""); }
+
     Application.Exit();
   }
 
   private void btnGModH_Click(object sender, System.EventArgs e) {
-    if (string.IsNullOrWhiteSpace(filePath)) {
-      Process.Start(gmodh);
-    } else {
-      Process.Start(gmodh, $"\"{Path.GetFullPath(filePath)}\"");
-    }
+    if (string.IsNullOrWhiteSpace(_filePath)) { Process.Start(_gmodh); } else { Process.Start(_gmodh, $"\"{Path.GetFullPath(_filePath)}\""); }
+
     Application.Exit();
   }
 
   private void btnGModHPP_Click(object sender, System.EventArgs e) {
-    if (string.IsNullOrWhiteSpace(filePath)) {
-      Process.Start(gmodhpp);
-    } else {
-      Process.Start(gmodhpp, $"\"{Path.GetFullPath(filePath)}\"");
-    }
+    if (string.IsNullOrWhiteSpace(_filePath)) { Process.Start(_gmodhpp); } else { Process.Start(_gmodhpp, $"\"{Path.GetFullPath(_filePath)}\""); }
+
     Application.Exit();
   }
 
   private void btnHL2H_MouseHover(object sender, System.EventArgs e) {
     tooltipHL2H.SetToolTip(btnHL2H, "Half-Life 2 Hammer");
+    // ReSharper disable once LocalizableElement
     statusLabel.Text = "Half-Life 2 Hammer";
   }
 
@@ -109,6 +96,7 @@ public partial class Launcher : Form {
 
   private void btnHL2HPP_MouseHover(object sender, System.EventArgs e) {
     tooltipHL2HPP.SetToolTip(btnHL2HPP, "Half-Life 2 Hammer++");
+    // ReSharper disable once LocalizableElement
     statusLabel.Text = "Half-Life 2 Hammer++";
   }
 
@@ -119,6 +107,7 @@ public partial class Launcher : Form {
 
   private void btnGModH_MouseHover(object sender, System.EventArgs e) {
     tooltipGModH.SetToolTip(btnGModH, "Garry's Mod Hammer");
+    // ReSharper disable once LocalizableElement
     statusLabel.Text = "Garry's Mod Hammer";
   }
 
@@ -129,6 +118,7 @@ public partial class Launcher : Form {
 
   private void btnGModHPP_MouseHover(object sender, System.EventArgs e) {
     tooltipGModHPP.SetToolTip(btnGModHPP, "Garry's Mod Hammer++");
+    // ReSharper disable once LocalizableElement
     statusLabel.Text = "Garry's Mod Hammer++";
   }
 
@@ -138,14 +128,26 @@ public partial class Launcher : Form {
   }
 
   private void Launcher_KeyDown(object sender, KeyEventArgs e) {
-    if (e.KeyCode == Keys.D1 || e.KeyCode == Keys.NumPad1) {
-      btnHL2H.PerformClick();
-    } else if (e.KeyCode == Keys.D2 || e.KeyCode == Keys.NumPad2) {
-      btnHL2HPP.PerformClick();
-    } else if (e.KeyCode == Keys.D3 || e.KeyCode == Keys.NumPad3) {
-      btnGModH.PerformClick();
-    } else if (e.KeyCode == Keys.D4 || e.KeyCode == Keys.NumPad4) {
-      btnGModHPP.PerformClick();
+    // ReSharper disable once SwitchStatementHandlesSomeKnownEnumValuesWithDefault
+    // ReSharper disable once SwitchStatementMissingSomeEnumCasesNoDefault
+    switch (e.KeyCode) {
+      case Keys.D1:
+      case Keys.NumPad1:
+        btnHL2H.PerformClick();
+        break;
+      case Keys.D2:
+      case Keys.NumPad2:
+        btnHL2HPP.PerformClick();
+        break;
+      case Keys.D3:
+      case Keys.NumPad3:
+        btnGModH.PerformClick();
+        break;
+      case Keys.D4:
+      case Keys.NumPad4:
+        btnGModHPP.PerformClick();
+        break;
     }
   }
+}
 }
