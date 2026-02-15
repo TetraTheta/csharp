@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../library/dark-mode-forms/DarkModeForms.csproj" />
+  <Project Path="rcalc.csproj" />
+</Solution>

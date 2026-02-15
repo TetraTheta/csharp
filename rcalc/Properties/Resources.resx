@@ -55,27 +55,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="game_gmod_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\game_gmod_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="game_gmod_gray_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\game_gmod_gray_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="game_hl2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\game_hl2_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="game_hl2_gray_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\game_hl2_gray_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="hammer_gmod_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\hammer_gmod_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="hammer_hl2_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\hammer_hl2_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="hammer_hpp_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\hammer_hpp_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="MainIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MainIcon.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>

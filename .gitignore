@@ -834,3 +834,6 @@ $RECYCLE.BIN/
 
 # IntelliJ IDEA (missing elements)
 .idea/
+
+# dotenv
+.env.local

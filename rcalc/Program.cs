@@ -1,8 +1,8 @@
 using System;
 using System.Windows.Forms;
+using rcalc.Forms;
 
-namespace rcalc;
-
+namespace rcalc {
 internal static class Program {
   [STAThread]
   private static void Main(string[] args) {
@@ -18,4 +18,5 @@ internal static class Program {
     Application.SetCompatibleTextRenderingDefault(false);
     Application.Run(new CalculatorForm(x, y, a));
   }
+}
 }
