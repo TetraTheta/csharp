@@ -70,6 +70,11 @@ internal static class Program {
 
   private static bool IsAdmin() => new WindowsPrincipal(WindowsIdentity.GetCurrent()).IsInRole(WindowsBuiltInRole.Administrator);
 
+  private static bool IsExecutable(string file) {
+    var ext = Path.GetExtension(file)?.ToLowerInvariant() ?? string.Empty;
+    return ext == ".exe" || ext == ".com" || ext == ".bat" || ext == ".cmd" || ext == ".ps1";
+  }
+
   private static void RestartAsAdmin(string[] args) {
     var psi = new ProcessStartInfo {
       FileName = Application.ExecutablePath,
@@ -84,12 +89,30 @@ internal static class Program {
 
   private static void RegisterTask(string configFile, string taskName) {
     string exePath = Application.ExecutablePath;
-    string actionArguments = $"\"{configFile}\" /run";
 
     using (var ts = new TaskService()) {
       var td = ts.NewTask();
       td.RegistrationInfo.Description = $"SkipUAC Task for {Path.GetFileName(configFile)}";
-      td.Actions.Add(new ExecAction(exePath, actionArguments, Path.GetDirectoryName(exePath)));
+
+      if (IsExecutable(configFile)) {
+        var ext = Path.GetExtension(configFile)?.ToLowerInvariant();
+        switch (ext) {
+          case ".bat":
+          case ".cmd":
+            td.Actions.Add(new ExecAction("cmd.exe", $"/c \"{configFile}\"", Path.GetDirectoryName(configFile) ?? Environment.CurrentDirectory));
+            break;
+          case ".ps1":
+            td.Actions.Add(new ExecAction("powershell.exe", $"-NoProfile -ExecutionPolicy Bypass -File \"{configFile}\"", Path.GetDirectoryName(configFile) ?? Environment.CurrentDirectory));
+            break;
+          default:
+            td.Actions.Add(new ExecAction(configFile, null, Path.GetDirectoryName(configFile) ?? Environment.CurrentDirectory));
+            break;
+        }
+      } else {
+        string actionArguments = $"\"{configFile}\" /run";
+        td.Actions.Add(new ExecAction(exePath, actionArguments, Path.GetDirectoryName(exePath)));
+      }
+
       td.Principal.LogonType = TaskLogonType.InteractiveToken;
       td.Principal.RunLevel = TaskRunLevel.Highest;
       td.Settings.AllowDemandStart = true;
