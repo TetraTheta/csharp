@@ -1,49 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5084CCA0-5FB8-433B-916F-2D43126FACB1}</ProjectGuid>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Configuration</AssemblyName>
-    <FileAlignment>512</FileAlignment>
     <OutputType>Library</OutputType>
-    <RootNamespace>Configuration</RootNamespace>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Code Style -->
+    <DebugType>none</DebugType>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System"/>
-    <Reference Include="System.Core"/>
-    <Reference Include="System.Numerics"/>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="INI.cs"/>
-    <Compile Include="Libraries\NaturalStringComparer.cs"/>
-    <Compile Include="TextConfig.cs"/>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".editorconfig"/>
-    <None Include="CodeMaid.config"/>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>

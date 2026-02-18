@@ -17,14 +17,14 @@ public sealed class PatternSet {
   public static PatternSet Parse(string pattern) {
     if (string.IsNullOrWhiteSpace(pattern)) pattern = "*";
 
-    string[] tokens = pattern.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).Where(t => t.Length > 0).ToArray();
+    string[] tokens = pattern.Split([';'], StringSplitOptions.RemoveEmptyEntries).Select(t => t.Trim()).Where(t => t.Length > 0).ToArray();
 
     var pos = new List<string>(tokens.Length);
     var neg = new List<string>(tokens.Length);
 
     foreach (string t in tokens) {
-      if (t.StartsWith("!")) {
-        string sub = t.Substring(1).Trim();
+      if (t.StartsWith('!')) {
+        string sub = t[1..].Trim();
         if (sub.Length > 0) neg.Add(sub);
       } else { pos.Add(t); }
     }
@@ -46,7 +46,7 @@ public sealed class PatternSet {
   }
 
   private static bool WildcardMatches(string filename, string filenameWithoutExt, string pattern) {
-    if (!pattern.Contains("*")) { return string.Equals(pattern.Contains(".") ? filename : filenameWithoutExt, pattern, StringComparison.OrdinalIgnoreCase); }
+    if (!pattern.Contains('*')) { return string.Equals(pattern.Contains('.') ? filename : filenameWithoutExt, pattern, StringComparison.OrdinalIgnoreCase); }
 
     string rx = WildcardToRegex(pattern);
     return Regex.IsMatch(filename, rx, RegexOptions.IgnoreCase);

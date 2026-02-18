@@ -16,16 +16,16 @@ public class AppendOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; private set; } = "PATH";
+  public string Key { get; private init; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; private set; }
+  public EnvironmentVariableTarget Target { get; private init; }
 
   [Value(0, MetaName = "VAR", HelpText = "New variable to add to the end of the environment variable", Required = true)]
-  public string Value { get; private set; } = "";
+  public string Value { get; private init; } = "";
 
   public override string ToString() {
-    StringBuilder sb = new StringBuilder();
+    var sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Value: {Value}");
     sb.AppendLine($"Target: {Target}");
@@ -44,16 +44,16 @@ public class PrependOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; private set; } = "PATH";
+  public string Key { get; private init; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; set; }
+  public EnvironmentVariableTarget Target { get; private init; }
 
   [Value(0, MetaName = "VAR", HelpText = "New variable to add to the front of the environment variable", Required = true)]
-  public string Value { get; private set; } = "";
+  public string Value { get; private init; } = "";
 
   public override string ToString() {
-    StringBuilder sb = new StringBuilder();
+    var sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Value: {Value}");
     sb.AppendLine($"Target: {Target}");
@@ -72,16 +72,16 @@ public class RemoveOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; set; } = "PATH";
+  public string Key { get; private init; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; set; }
+  public EnvironmentVariableTarget Target { get; private init; }
 
   [Value(0, MetaName = "VAR", HelpText = "Variable to remove from the environment variable", Required = true)]
-  public string Value { get; set; } = "";
+  public string Value { get; private init; } = "";
 
   public override string ToString() {
-    StringBuilder sb = new StringBuilder();
+    var sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Value: {Value}");
     sb.AppendLine($"Target: {Target}");
@@ -100,13 +100,13 @@ public class ShowOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; private set; } = "PATH";
+  public string Key { get; private init; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", HelpText = "", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; set; }
+  public EnvironmentVariableTarget Target { get; private init; }
 
   public override string ToString() {
-    StringBuilder sb = new StringBuilder();
+    var sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Target: {Target}");
     return sb.ToString();
@@ -124,13 +124,13 @@ public class SlimOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; set; } = "PATH";
+  public string Key { get; private init; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; private set; }
+  public EnvironmentVariableTarget Target { get; private init; }
 
   public override string ToString() {
-    StringBuilder sb = new StringBuilder();
+    var sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Target: {Target}");
     return sb.ToString();
@@ -148,13 +148,13 @@ public class SortOptions {
   }
 
   [Option('e', "envvar", MetaValue = "ENVVAR", HelpText = "Name of the environment variable", Default = "PATH")]
-  public string Key { get; private set; } = "PATH";
+  public string Key { get; private init; } = "PATH";
 
   [Option('t', "target", MetaValue = "TARGET", Default = EnvironmentVariableTarget.User)]
-  public EnvironmentVariableTarget Target { get; set; }
+  public EnvironmentVariableTarget Target { get; private init; }
 
   public override string ToString() {
-    StringBuilder sb = new StringBuilder();
+    var sb = new StringBuilder();
     sb.AppendLine($"Key: {Key}");
     sb.AppendLine($"Target: {Target}");
     return sb.ToString();

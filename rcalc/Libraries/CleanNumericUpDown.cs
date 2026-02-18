@@ -5,11 +5,11 @@ using System.Windows.Forms;
 namespace rcalc.Libraries {
 public class CleanNumericUpDown : NumericUpDown {
   protected override void UpdateEditText() {
-    this.Text = this.Value.ToString("0.############################", CultureInfo.CurrentCulture);
+    Text = Value.ToString("0.############################", CultureInfo.CurrentCulture);
   }
 
   protected override void ValidateEditText() {
-    if (decimal.TryParse(this.Text, out decimal parsed)) { this.Value = Math.Min(Math.Max(parsed, this.Minimum), this.Maximum); }
+    if (decimal.TryParse(Text, out decimal parsed)) { Value = Math.Min(Math.Max(parsed, Minimum), Maximum); }
 
     base.ValidateEditText();
   }

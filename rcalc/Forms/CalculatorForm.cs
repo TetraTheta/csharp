@@ -3,14 +3,12 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using DarkModeForms;
 
 namespace rcalc.Forms {
 [SuppressMessage("ReSharper", "LocalizableElement")]
 public partial class CalculatorForm : Form {
   public CalculatorForm(decimal x, decimal y, decimal a) {
     InitializeComponent();
-    DarkModeHelper.Apply(this);
 
     numericUpDownA.Text = a.ToString(CultureInfo.CurrentCulture);
     numericUpDownX.Text = x.ToString(CultureInfo.CurrentCulture);
@@ -27,12 +25,11 @@ public partial class CalculatorForm : Form {
     if (listBoxResult.SelectedItem == null) return;
     string decSep = Regex.Escape(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
     string pattern = $@"\[(\d+({decSep}\d+)?)\s*:\s*(\d+({decSep}\d+)?)\]\s*=\s*\[(\d+({decSep}\d+)?)\s*:\s*(\d+({decSep}\d+)?)\]";
-    Match match = Regex.Match(listBoxResult.SelectedItem.ToString(), pattern);
+    Match match = Regex.Match(listBoxResult.SelectedItem.ToString() ?? string.Empty, pattern);
     if (match.Success) {
-      List<decimal> arr = new List<decimal>();
+      var arr = new List<decimal>();
       for (int i = 1; i < match.Groups.Count; i += 2) {
-        decimal.TryParse(match.Groups[i].Value, out decimal k);
-        arr.Add(k);
+        if (decimal.TryParse(match.Groups[i].Value, out decimal k)) arr.Add(k);
       }
 
       if (arr.Count != 4) { MessageBox.Show("Failed to parse result to list!"); } else {
@@ -74,7 +71,7 @@ public partial class CalculatorForm : Form {
   }
 
   private static string Clean(decimal value) {
-    return value.ToString("G29", CultureInfo.CurrentCulture);
+    return value.ToString("0.############################", CultureInfo.CurrentCulture);
   }
 }
 }

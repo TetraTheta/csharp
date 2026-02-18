@@ -1,4 +1,3 @@
 <Solution>
-  <Project Path="../library/dark-mode-forms/DarkModeForms.csproj" />
   <Project Path="HammerLauncher.csproj" />
 </Solution>

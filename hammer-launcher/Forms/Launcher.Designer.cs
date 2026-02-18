@@ -185,7 +185,7 @@ namespace HammerLauncher.Forms {
       this.Controls.Add(this.btnHL2H);
       this.Controls.Add(this.picHL2);
       this.Controls.Add(this.tbTarget);
-      this.Font = new System.Drawing.Font("맑은 고딕", 10F);
+      this.Font = new System.Drawing.Font("Segoe UI", 10F);
       this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
       this.Icon = Resources.MainIcon;
       this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);

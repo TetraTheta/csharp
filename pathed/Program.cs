@@ -26,7 +26,7 @@ public static class Program {
         cfg.CaseInsensitiveEnumValues = true;
       }
     );
-    var result = parser.ParseArguments(args, types);
+    ParserResult<object>? result = parser.ParseArguments(args, types);
 
     int exitCode = 0;
 
@@ -52,9 +52,9 @@ public static class Program {
     int width;
     try { width = Console.WindowWidth; } catch { width = 80; }
 
-    HelpText help = HelpText.AutoBuild(
+    var help = HelpText.AutoBuild(
       result, ht => {
-        var h = HelpText.DefaultParsingErrorsHandler(result, ht);
+        HelpText? h = HelpText.DefaultParsingErrorsHandler(result, ht);
         h.Copyright = string.Empty;
         h.AddDashesToOption = true;
         h.AdditionalNewLineAfterOption = false;

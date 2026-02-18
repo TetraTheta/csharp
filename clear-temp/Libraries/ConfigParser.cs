@@ -7,9 +7,9 @@ public static class ConfigParser {
   public static IEnumerable<ConfigEntry> Parse(string[] lines) {
     foreach (string raw in lines) {
       string line = raw.Trim();
-      if (string.IsNullOrWhiteSpace(raw) || line.StartsWith(";") || line.StartsWith("#")) continue;
+      if (string.IsNullOrWhiteSpace(raw) || line.StartsWith(';') || line.StartsWith('#')) continue;
 
-      string[] parts = line.Split(new[] { '|' }, 3);
+      string[] parts = line.Split(['|'], 3);
       if (parts.Length == 0) continue;
 
       string rawPath = parts[0].Trim();

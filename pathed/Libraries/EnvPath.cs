@@ -5,23 +5,22 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Pathed.Libraries {
-public sealed class EnvPath {
+public sealed partial class EnvPath {
   private const uint FileFlagBackupSemantics = 0x02000000;
   private const uint FileNameNormalized = 0x0;
 
   private readonly string _key;
   private readonly EnvironmentVariableTarget _target;
-  private List<string> _paths;
+  private readonly List<string> _paths;
 
   public EnvPath(string key, EnvironmentVariableTarget target) {
     this._key = key;
     this._target = target;
 
     string raw = Environment.GetEnvironmentVariable(key, target) ?? string.Empty;
-    _paths = raw.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries).ToList();
+    _paths = raw.Split([';'], StringSplitOptions.RemoveEmptyEntries).ToList();
   }
 
   public int Append(string value) {
@@ -92,10 +91,9 @@ public sealed class EnvPath {
     var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
     var cleaned = new List<string>();
 
-    foreach (var p in _paths) {
-      if (string.IsNullOrWhiteSpace(p)) continue;
+    foreach (string p in _paths.Where(p => !string.IsNullOrWhiteSpace(p))) {
       try {
-        var full = Normalize(p);
+        string full = Normalize(p);
         if (!DoesExist(full)) continue;
         if (seen.Add(full)) cleaned.Add(full);
         // ReSharper disable once RedundantJumpStatement
@@ -132,14 +130,14 @@ public sealed class EnvPath {
 
   // Some dirty jobs for disabling File System Redirection
   private static string GetFinalPathName(string dirtyPath) {
-    using (var handle = CreateFile(dirtyPath, 0, FileShare.ReadWrite | FileShare.Delete, IntPtr.Zero, FileMode.Open, (FileAttributes)FileFlagBackupSemantics, IntPtr.Zero)) {
-      if (handle.IsInvalid) throw new Win32Exception(Marshal.GetLastWin32Error());
-      var sb = new StringBuilder(1024);
-      uint size = GetFinalPathNameByHandle(handle, sb, (uint)sb.Capacity, FileNameNormalized);
-      if (size == 0 || size > sb.Capacity) throw new Win32Exception(Marshal.GetLastWin32Error());
-      string result = sb.ToString();
-      return result.StartsWith(@"\\?\") ? result.Substring(4) : result;
-    }
+    using SafeFileHandle handle = CreateFile(dirtyPath, 0, FileShare.ReadWrite | FileShare.Delete, IntPtr.Zero, FileMode.Open, (FileAttributes)FileFlagBackupSemantics, IntPtr.Zero);
+    if (handle.IsInvalid) throw new Win32Exception(Marshal.GetLastWin32Error());
+    char[] buffer = new char[1024];
+    uint size = GetFinalPathNameByHandle(handle, buffer, (uint)buffer.Length, FileNameNormalized);
+    if (size == 0) throw new Win32Exception(Marshal.GetLastWin32Error());
+    if (size > buffer.Length) throw new InvalidOperationException("Path exceeded buffer capacity");
+    string result = new string(buffer, 0, (int)size);
+    return result.StartsWith(@"\\?\") ? result[4..] : result;
   }
 
   private static bool DoesExist(string path) {
@@ -147,18 +145,18 @@ public sealed class EnvPath {
     return File.Exists(expanded) || Directory.Exists(expanded);
   }
 
-  [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  private static extern SafeFileHandle CreateFile(
+  [LibraryImport("kernel32.dll", EntryPoint = "CreateFileW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+  private static partial SafeFileHandle CreateFile(
     [MarshalAs(UnmanagedType.LPTStr)] string filename,
-    [MarshalAs(UnmanagedType.U4)] FileAccess access,
-    [MarshalAs(UnmanagedType.U4)] FileShare share,
+    FileAccess access,
+    FileShare share,
     IntPtr securityAttributes,
-    [MarshalAs(UnmanagedType.U4)] FileMode creationDisposition,
-    [MarshalAs(UnmanagedType.U4)] FileAttributes flagsAndAttributes,
+    FileMode creationDisposition,
+    FileAttributes flagsAndAttributes,
     IntPtr templateFile
   );
 
-  [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-  private static extern uint GetFinalPathNameByHandle(SafeFileHandle hFile, [MarshalAs(UnmanagedType.LPTStr)] StringBuilder lpszFilePath, uint cchFilePath, uint dwFlags);
+  [LibraryImport("kernel32.dll", EntryPoint = "GetFinalPathNameByHandleW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+  private static partial uint GetFinalPathNameByHandle(SafeFileHandle hFile, [Out] char[] lpszFilePath, uint cchFilePath, uint dwFlags);
 }
 }

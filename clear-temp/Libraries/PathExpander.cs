@@ -12,25 +12,24 @@ public static class PathExpander {
 
     string norm = pathPattern.Trim().Replace('/', Sep);
 
-    string root = Path.GetPathRoot(norm);
+    string? root = Path.GetPathRoot(norm);
     if (string.IsNullOrWhiteSpace(root)) root = Path.GetFullPath(Environment.CurrentDirectory);
 
-    string rest = norm.Substring(root.Length).Trim(Sep);
+    string rest = norm[root.Length..].Trim(Sep);
 
-    string[] segments = rest.Length == 0 ? Array.Empty<string>() : rest.Split(Sep);
+    string[] segments = rest.Length == 0 ? [] : rest.Split(Sep);
     var currentBases = new List<string> { root.TrimEnd(Sep) + Sep };
 
     foreach (string seg in segments) {
       var next = new List<string>();
       foreach (string baseDir in currentBases) {
         try {
-          if (seg.Contains("*")) { next.AddRange(SafeIo.EnumerateDirectoriesWithPattern(baseDir, seg)); } else {
+          if (seg.Contains('*')) { next.AddRange(SafeIo.EnumerateDirectoriesWithPattern(baseDir, seg)); } else {
             string combined = Path.Combine(baseDir, seg);
             if (Directory.Exists(combined)) next.Add(combined);
           }
-        } catch {
-          // ignored
-        }
+          // ReSharper disable once EmptyGeneralCatchClause
+        } catch { }
       }
 
       if (next.Count == 0) yield break;

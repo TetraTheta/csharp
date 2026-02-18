@@ -14,8 +14,9 @@ public static class SteamRegistry {
 
   private static string GetRegistryPath(string path) {
     try {
-      using (var hklm64 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
-      using (var key = hklm64.OpenSubKey(path, false)) { return key?.GetValue("InstallLocation") as string ?? string.Empty; }
+      using RegistryKey hklm64 = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64);
+      using RegistryKey? key = hklm64.OpenSubKey(path, false);
+      return key?.GetValue("InstallLocation") as string ?? string.Empty;
     } catch (Exception e) {
       // ReSharper disable once LocalizableElement
       MessageBox.Show($"Could not open '{path}':\n{e.Message}");

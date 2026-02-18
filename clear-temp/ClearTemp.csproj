@@ -1,72 +1,33 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\Costura.Fody.4.1.0\build\Costura.Fody.props" Condition="Exists('packages\Costura.Fody.4.1.0\build\Costura.Fody.props')"/>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B70F3244-CCDF-4BC3-997F-8C80CCC33BBB}</ProjectGuid>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <AssemblyName>ClearTemp</AssemblyName>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <FileAlignment>512</FileAlignment>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ClearTemp</RootNamespace>
-    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net10.0</TargetFramework>
+    <!-- Code Style -->
+    <DebugType>none</DebugType>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
+    <Nullable>enable</Nullable>
+    <!-- Assembly Information -->
+    <AssemblyTitle>ClearTemp</AssemblyTitle>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Company>TetraTheta</Company>
+    <Copyright>Copyright (c) TetraTheta All rights reserved</Copyright>
+    <Description>Clear Temporary Files</Description>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+    <Product>$(AssemblyTitle)</Product>
+    <Title>$(AssemblyTitle)</Title>
+    <!-- Publish -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <!--
+    <PublishTrimmed>true</PublishTrimmed>
+    <SelfContained>true</SelfContained>
+    -->
+    <SelfContained>false</SelfContained>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Costura, Version=4.1.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
-      <HintPath>packages\Costura.Fody.4.1.0\lib\net40\Costura.dll</HintPath>
-    </Reference>
-    <Reference Include="System"/>
-    <Reference Include="System.Core"/>
+    <None Update="ClearTemp.txt" CopyToOutputDirectory="Always" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Libraries\ConfigEntry.cs"/>
-    <Compile Include="Libraries\ConfigParser.cs"/>
-    <Compile Include="Libraries\ConsolePrinter.cs"/>
-    <Compile Include="Libraries\PathExpander.cs"/>
-    <Compile Include="Libraries\PatternSet.cs"/>
-    <Compile Include="Libraries\Remover.cs"/>
-    <Compile Include="Libraries\SafeIO.cs"/>
-    <Compile Include="Program.cs"/>
-    <Compile Include="Properties\AssemblyInfo.cs"/>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include=".editorconfig"/>
-    <None Include="ClearTemp.txt" CopyToOutputDirectory="Always"/>
-    <None Include="CodeMaid.config"/>
-    <None Include="FodyWeavers.xml"/>
-    <None Include="app.manifest"/>
-    <None Include="packages.config"/>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105.The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('packages\Costura.Fody.4.1.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Costura.Fody.4.1.0\build\Costura.Fody.props'))"/>
-    <Error Condition="!Exists('packages\Fody.6.9.3\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Fody.6.9.3\build\Fody.targets'))"/>
-  </Target>
-  <Import Project="packages\Fody.6.9.3\build\Fody.targets" Condition="Exists('packages\Fody.6.9.3\build\Fody.targets')"/>
 </Project>

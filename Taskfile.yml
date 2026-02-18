@@ -6,12 +6,13 @@ version: '3'
 #    - PFX: Location of PFX file for code sign           #
 #    - PFX_PW: Password of PFX file                      #
 ##########################################################
-vars:
-  DIST: ../.dist
-  CONFIGURATION: Release
-  PLATFORM: Any CPU
-  MSBUILD: 'C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\MSBuild\Current\Bin\amd64\MSBuild.exe'
-  SIGNTOOL: 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe'
+env:
+  CS_CONFIGURATION: Release
+  CS_DIST: ../.dist
+  CS_DOTNET: 'C:\Program Files\dotnet\dotnet.exe'
+  CS_FRAMEWORK: net10.0
+  CS_SIGNTOOL: 'C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe'
+  CS_TARGET: win-x64
 
 dotenv:
   - .env.local
@@ -30,60 +31,58 @@ tasks:
       - task: build:hammer-launcher
       - task: build:pathed
       - task: build:rcalc
-      - task: build:skip-uac
   build:clear-temp:
     dir: clear-temp
     cmds:
-      - '"{{.MSBUILD}}" ClearTemp.slnx -t:build -restore -p:RestorePackagesConfig=true -p:Configuration={{.CONFIGURATION}} -p:Platform="{{.PLATFORM}}"'
-      - mkdir {{.DIST}} 2> /dev/null
-      - mv bin/{{.CONFIGURATION}}/ClearTemp.exe {{.DIST}}
-      - mv bin/{{.CONFIGURATION}}/ClearTemp.txt {{.DIST}}
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - 'mkdir "$CS_DIST" 2> /dev/null'
+      - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.exe "$CS_DIST"'
+      - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.txt "$CS_DIST"'
   build:hammer-launcher:
     dir: hammer-launcher
+    env:
+      CS_FRAMEWORK: net10.0-windows
     cmds:
-      - '"{{.MSBUILD}}" HammerLauncher.slnx -t:build -restore -p:RestorePackagesConfig=true -p:Configuration={{.CONFIGURATION}} -p:Platform="{{.PLATFORM}}"'
-      - mkdir {{.DIST}} 2> /dev/null
-      - mv bin/{{.CONFIGURATION}}/HammerLauncher.exe {{.DIST}}
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - 'mkdir "$CS_DIST" 2> /dev/null'
+      - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/HammerLauncher.exe "$CS_DIST"'
   build:pathed:
     dir: pathed
+    env:
+      CS_FRAMEWORK: net10.0-windows
     cmds:
-      - '"{{.MSBUILD}}" Pathed.slnx -t:build -restore -p:RestorePackagesConfig=true -p:Configuration={{.CONFIGURATION}} -p:Platform="{{.PLATFORM}}"'
-      - mkdir {{.DIST}} 2> /dev/null
-      - mv bin/{{.CONFIGURATION}}/Pathed.exe {{.DIST}}
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - 'mkdir "$CS_DIST" 2> /dev/null'
+      - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/Pathed.exe "$CS_DIST"'
   build:rcalc:
     dir: rcalc
+    env:
+      CS_FRAMEWORK: net10.0-windows
     cmds:
-      - '"{{.MSBUILD}}" rcalc.slnx -t:build -restore -p:RestorePackagesConfig=true -p:Configuration={{.CONFIGURATION}} -p:Platform="{{.PLATFORM}}"'
-      - mkdir {{.DIST}} 2> /dev/null
-      - mv bin/{{.CONFIGURATION}}/rcalc.exe {{.DIST}}
-  build:skip-uac:
-    dir: skip-uac
-    cmds:
-      - '"{{.MSBUILD}}" SkipUAC.slnx -t:build -restore -p:RestorePackagesConfig=true -p:Configuration={{.CONFIGURATION}} -p:Platform="{{.PLATFORM}}"'
-      - mkdir {{.DIST}} 2> /dev/null
-      - mv bin/{{.CONFIGURATION}}/SkipUAC.exe {{.DIST}}
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - 'mkdir "$CS_DIST" 2> /dev/null'
+      - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/rcalc.exe "$CS_DIST"'
   cleanup:
+    ignore_error: true
     cmds:
       - taskkill /f /im MSBuild.exe
+      - taskkill /f /im VBCSCompiler.exe
+      - taskkill /f /im dotnet.exe
   sign:
     cmds:
       - task: sign:clear-temp
       - task: sign:hammer-launcher
       - task: sign:pathed
       - task: sign:rcalc
-      - task: sign:skip-uac
   sign:clear-temp:
     cmds:
-      - '"{{.SIGNTOOL}}" sign /f "{{.PFX}}" /p "{{.PFX_PW}}" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/ClearTemp.exe'
+      - '"$CS_SIGNTOOL" sign /f "$PFX" /p "$PFX_PW" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/ClearTemp.exe'
   sign:hammer-launcher:
     cmds:
-      - '"{{.SIGNTOOL}}" sign /f "{{.PFX}}" /p "{{.PFX_PW}}" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/HammerLauncher.exe'
+      - '"$CS_SIGNTOOL" sign /f "$PFX" /p "$PFX_PW" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/HammerLauncher.exe'
   sign:pathed:
     cmds:
-      - '"{{.SIGNTOOL}}" sign /f "{{.PFX}}" /p "{{.PFX_PW}}" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/Pathed.exe'
+      - '"$CS_SIGNTOOL" sign /f "$PFX" /p "$PFX_PW" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/Pathed.exe'
   sign:rcalc:
     cmds:
-      - '"{{.SIGNTOOL}}" sign /f "{{.PFX}}" /p "{{.PFX_PW}}" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/rcalc.exe'
-  sign:skip-uac:
-    cmds:
-      - '"{{.SIGNTOOL}}" sign /f "{{.PFX}}" /p "{{.PFX_PW}}" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/SkipUAC.exe'
+      - '"$CS_SIGNTOOL" sign /f "$PFX" /p "$PFX_PW" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/rcalc.exe'

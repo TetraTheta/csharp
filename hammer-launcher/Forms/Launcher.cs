@@ -2,7 +2,6 @@ using HammerLauncher.Libraries;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using DarkModeForms;
 using HammerLauncher.Properties;
 
 namespace HammerLauncher.Forms {
@@ -16,7 +15,6 @@ public partial class Launcher : Form {
 
   public Launcher(string file) {
     InitializeComponent();
-    DarkModeHelper.Apply(this);
 
     // Set Target
     if (!string.IsNullOrWhiteSpace(file)) {

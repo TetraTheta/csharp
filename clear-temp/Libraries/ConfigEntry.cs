@@ -5,15 +5,9 @@ public enum RemoveOption {
   RemoveSelf
 }
 
-public class ConfigEntry {
-  public string PathPattern { get; }
-  public PatternSet Patterns { get; }
-  public RemoveOption Option { get; }
-
-  public ConfigEntry(string pathPattern, PatternSet patterns, RemoveOption option) {
-    this.PathPattern = pathPattern;
-    this.Patterns = patterns;
-    this.Option = option;
-  }
+public class ConfigEntry(string pathPattern, PatternSet patterns, RemoveOption option) {
+  public string PathPattern { get; } = pathPattern;
+  public PatternSet Patterns { get; } = patterns;
+  public RemoveOption Option { get; } = option;
 }
 }

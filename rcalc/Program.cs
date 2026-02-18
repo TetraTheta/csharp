@@ -16,6 +16,7 @@ internal static class Program {
 
     Application.EnableVisualStyles();
     Application.SetCompatibleTextRenderingDefault(false);
+    Application.SetColorMode(SystemColorMode.Dark);
     Application.Run(new CalculatorForm(x, y, a));
   }
 }

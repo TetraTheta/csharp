@@ -11,7 +11,7 @@ public enum ResultKind {
 
 public static class ConsolePrinter {
   public static void PrintResult(ResultKind result, string path) {
-    string name = Path.GetFileName(path) ?? path;
+    string name = Path.GetFileName(path);
     string prefix = Path.GetDirectoryName(path) ?? string.Empty;
 
     ConsoleColor color;
