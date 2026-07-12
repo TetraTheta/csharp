@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- Code Style -->
+    <DebugType>none</DebugType>
+    <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
+    <Nullable>enable</Nullable>
+    <!-- Assembly Information -->
+    <AssemblyTitle>GModDescriptionGenerator</AssemblyTitle>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <Company>TetraTheta</Company>
+    <Copyright>Copyright (c) TetraTheta All rights reserved</Copyright>
+    <Description>Generate Garry's Mod Addon Description</Description>
+    <FileVersion>$(AssemblyVersion)</FileVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
+    <InformationalVersion>$(AssemblyVersion)</InformationalVersion>
+    <Product>$(AssemblyTitle)</Product>
+    <Title>$(AssemblyTitle)</Title>
+    <!-- Publish -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <!--
+    <PublishTrimmed>true</PublishTrimmed>
+    <SelfContained>true</SelfContained>
+    <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
+    -->
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Update="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+</Project>

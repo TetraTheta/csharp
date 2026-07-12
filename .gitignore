@@ -837,3 +837,6 @@ $RECYCLE.BIN/
 
 # dotenv
 .env.local
+
+# Misc
+.dist

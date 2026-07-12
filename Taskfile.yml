@@ -28,6 +28,7 @@ tasks:
   build:
     cmds:
       - task: build:clear-temp
+      - task: build:gmod-description-generator
       - task: build:hammer-launcher
       - task: build:pathed
       - task: build:rcalc
@@ -38,6 +39,14 @@ tasks:
       - 'mkdir "$CS_DIST" 2> /dev/null'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.exe "$CS_DIST"'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.txt "$CS_DIST"'
+  build:gmod-description-generator:
+    dir: gmod-description-generator
+    env:
+      CS_FRAMEWORK: net10.0-windows
+    cmds:
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - 'mkdir "$CS_DIST" 2> /dev/null'
+      - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/GModDescriptionGenerator.exe "$CS_DIST"'
   build:hammer-launcher:
     dir: hammer-launcher
     env:
@@ -71,12 +80,16 @@ tasks:
   sign:
     cmds:
       - task: sign:clear-temp
+      - task: sign:gmod-description-generator
       - task: sign:hammer-launcher
       - task: sign:pathed
       - task: sign:rcalc
   sign:clear-temp:
     cmds:
       - '"$CS_SIGNTOOL" sign /f "$PFX" /p "$PFX_PW" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/ClearTemp.exe'
+  sign:gmod-description-generator:
+    cmds:
+      - '"$CS_SIGNTOOL" sign /f "$PFX" /p "$PFX_PW" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/GModDescriptionGenerator.exe'
   sign:hammer-launcher:
     cmds:
       - '"$CS_SIGNTOOL" sign /f "$PFX" /p "$PFX_PW" /fd SHA256 /td SHA256 /tr http://timestamp.digicert.com .dist/HammerLauncher.exe'
