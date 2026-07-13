@@ -1,41 +1,79 @@
 using System;
 using System.Globalization;
-using System.Linq;
+using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Windows.Forms;
 
-namespace GModDescriptionGenerator;
+using GModDescriptionGenerator.Libraries;
+using GModDescriptionGenerator.Libraries.Extension;
+
+namespace GModDescriptionGenerator.Forms;
 
 public partial class MainForm : Form {
   private DateTime today = DateTime.Today;
-  private string nl = Environment.NewLine;
+  private readonly JsonSerializerOptions jsonOpt = new JsonSerializerOptions {
+    WriteIndented = true,
+    IndentCharacter = ' ',
+    IndentSize = 2
+  };
 
   public MainForm() {
     InitializeComponent();
 
-    comboBoxRDDate.Text = today.Day.ToString();
-    comboBoxRDMonth.Text = today.ToString("MMM", CultureInfo.InvariantCulture);
-    comboBoxRDYear.Text = today.Year.ToString();
+    comboBoxRDDate.SelectedIndex = comboBoxRDDate.FindStringExact(today.Day.ToString());
+    comboBoxRDMonth.SelectedIndex = comboBoxRDMonth.FindStringExact(today.ToString("MMM", CultureInfo.InvariantCulture));
+    comboBoxRDYear.SelectedIndex = comboBoxRDYear.FindStringExact(today.Year.ToString());
+
+    openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+    saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
   }
 
-  private string ReplaceNewLine(string original) => original.Replace("\r\n", "\n").Replace("\r", "\n").Replace("\n", nl);
-  private string GetText(Control control) => control.Text.Trim();
-  private string[] GetLines(TextBoxBase control) => control.Lines.Where(line => !string.IsNullOrWhiteSpace(line)).Select(line => line.Trim()).ToArray();
+  private void buttonReset_Click(object sender, EventArgs e) {
+    DialogResult result = MessageBox.Show("Are you sure want to reset?", "Important Question", MessageBoxButtons.YesNo);
+    if (result == DialogResult.Yes) {
+      textBoxTitle.Text = string.Empty;
+      textBoxAuthor.Text = string.Empty;
+      comboBoxRDDate.SelectedIndex = comboBoxRDDate.FindStringExact(today.Day.ToString());
+      comboBoxRDMonth.SelectedIndex = comboBoxRDMonth.FindStringExact(today.ToString("MMM", CultureInfo.InvariantCulture));
+      comboBoxRDYear.SelectedIndex = comboBoxRDYear.FindStringExact(today.Year.ToString());
+      textBoxDescription.Text = string.Empty;
+      textBoxSynopsis.Text = string.Empty;
+      checkBoxHL2.Checked = true;
+      checkBoxCSS.Checked = false;
+      checkBoxTF2.Checked = false;
+      checkBoxL4D2.Checked = false;
+      textBoxMapList.Text = string.Empty;
+      checkBoxSubtitle.Checked = false;
+      checkBoxSCTools.Checked = false;
+      checkBoxRecompiled.Checked = false;
+      textBoxWarning.Text = string.Empty;
+      textBoxPreview.Text = string.Empty;
+    }
+  }
+
+  private void buttonCopy_Click(object sender, EventArgs e) {
+    string preview = textBoxPreview.TrimmedText.NativeLine;
+    if (preview.Length > 0) {
+      Clipboard.SetDataObject(preview, true);
+      MessageBox.Show("Copied Preview text.", "Copied", MessageBoxButtons.OK);
+    }
+  }
 
   private void buttonGenerate_Click(object sender, System.EventArgs e) {
     StringBuilder sb = new();
     // Title
-    sb.Append($"[h1]{GetText(textBoxTitle)}[/h1]\n");
+    sb.Append($"[h1]{textBoxTitle.TrimmedText}[/h1]\n");
     // Author(s)
-    sb.Append($"[i]created by {GetText(textBoxAuthor)}[/i]\n\n");
+    sb.Append($"[i]created by {textBoxAuthor.TrimmedText}[/i]\n\n");
     // Release Date
-    sb.Append($"Date of publish: {GetText(comboBoxRDDate)} {GetText(comboBoxRDMonth)} {GetText(comboBoxRDYear)}\n");
+    sb.Append($"Date of publish: {comboBoxRDDate.TrimmedText} {comboBoxRDMonth.TrimmedText} {comboBoxRDYear.TrimmedText}\n");
     // Horizontal Rule
-    sb.Append("[hr]");
+    sb.Append("[hr][/hr]");
     // Description
-    if (GetText(textBoxDescription).Length > 0) sb.Append($"[h2]Description[/h2]\n{GetText(textBoxDescription)}\n");
+    if (textBoxDescription.TrimmedText.Length > 0) sb.Append($"[h2]Description[/h2]\n{textBoxDescription.TrimmedText}\n");
     // Synopsis
-    if (GetText(textBoxSynopsis).Length > 0) sb.Append($"[h2]Synopsis[/h2]\n{GetText(textBoxSynopsis)}\n");
+    if (textBoxSynopsis.TrimmedText.Length > 0) sb.Append($"[h2]Synopsis[/h2]\n{textBoxSynopsis.TrimmedText}\n");
     // Requirements
     bool hl2 = checkBoxHL2.Checked;
     bool css = checkBoxCSS.Checked;
@@ -51,9 +89,10 @@ public partial class MainForm : Form {
       sb.Append("[u]You should mount them anyway, because assets that are included in Garry's Mod doesn't have [b]music[/b] or voice-over.[/u]\n");
     }
     // Map List
-    string[] lines = GetLines(textBoxMapList);
+    string[] lines = textBoxMapList.TrimmedLines;
     if (lines.Length > 0) {
       sb.Append("[h2]Map List[/h2]\n");
+      sb.Append("[list]\n");
       foreach (string line in lines) sb.Append($"  [*]{line}\n");
       sb.Append("[/list]\n");
     }
@@ -76,7 +115,7 @@ public partial class MainForm : Form {
     }
     // Warning
     bool recompiled = checkBoxRecompiled.Checked;
-    string warning = GetText(textBoxWarning);
+    string warning = textBoxWarning.TrimmedText;
     if (recompiled || warning.Length > 0) {
       sb.Append("[h2]Warning[/h2]\n");
       if (recompiled) {
@@ -92,39 +131,79 @@ public partial class MainForm : Form {
     sb.Append("[h2]Disclaimer[/h2]\n");
     sb.Append("I only test map(s) with Sandbox gamemode with Singleplay environment. I do not guarantee that this add-on will work with any gamemode or Multiplay environment.\n\n");
     sb.Append("I didn't make these map(s). I just [i]ported[/i] these map(s) to Garry's Mod. All credits should go to original author(s).\n");
-    sb.Append("[hr]Search Tag: [spoiler]half life hl2 custom campaign[/spoiler]");
+    // Search Tag
+    sb.Append("[hr][/hr]Search Tag: [spoiler]half life hl2 custom campaign[/spoiler]");
 
-    textBoxPreview.Text = ReplaceNewLine(sb.ToString());
+    textBoxPreview.Text = sb.ToString().NativeLine;
   }
 
-  private void buttonReset_Click(object sender, EventArgs e) {
-    DialogResult result = MessageBox.Show("Are you sure want to reset?", "Important Question", MessageBoxButtons.YesNo);
-    if (result == DialogResult.Yes) {
-      textBoxTitle.Text = string.Empty;
-      textBoxAuthor.Text = string.Empty;
-      comboBoxRDDate.Text = today.Day.ToString();
-      comboBoxRDMonth.Text = today.ToString("MMM", CultureInfo.InvariantCulture);
-      comboBoxRDYear.Text = today.Year.ToString();
-      textBoxDescription.Text = string.Empty;
-      textBoxSynopsis.Text = string.Empty;
-      checkBoxHL2.Checked = true;
-      checkBoxCSS.Checked = false;
-      checkBoxTF2.Checked = false;
-      checkBoxL4D2.Checked = false;
-      textBoxMapList.Text = string.Empty;
-      checkBoxSubtitle.Checked = false;
-      checkBoxSCTools.Checked = false;
-      checkBoxRecompiled.Checked = false;
-      textBoxWarning.Text = string.Empty;
-      textBoxPreview.Text = string.Empty;
+  private void tsmiOpen_Click(object sender, EventArgs e) {
+    DialogResult result = openFileDialog.ShowDialog();
+    if (result == DialogResult.OK) {
+      try {
+        string jsonString = File.ReadAllText(openFileDialog.FileName);
+        DescriptionSettings settings = JsonSerializer.Deserialize<DescriptionSettings>(jsonString);
+        if (settings == null) throw new InvalidDataException("Could not parse JSON file content");
+        settings.TrimAll();
+        // sanitize Release Date
+        settings.RDDate = (settings.RDDate >= 0 && settings.RDDate < comboBoxRDDate.Items.Count) ? settings.RDDate : 0;
+        settings.RDMonth = (settings.RDMonth >= 0 && settings.RDMonth < comboBoxRDMonth.Items.Count) ? settings.RDMonth : 0;
+        settings.RDYear = (settings.RDYear >= 0 && settings.RDYear < comboBoxRDYear.Items.Count) ? settings.RDYear : 0;
+        // apply data
+        textBoxTitle.Text = settings.Title.NativeLine;
+        textBoxAuthor.Text = settings.Author.NativeLine;
+        comboBoxRDDate.SelectedIndex = settings.RDDate;
+        comboBoxRDMonth.SelectedIndex = settings.RDMonth;
+        comboBoxRDYear.SelectedIndex = settings.RDYear;
+        textBoxDescription.Text = settings.Description.NativeLine;
+        textBoxSynopsis.Text = settings.Synopsis.NativeLine;
+        checkBoxHL2.Checked = settings.HL2;
+        checkBoxCSS.Checked = settings.CSS;
+        checkBoxTF2.Checked = settings.TF2;
+        checkBoxL4D2.Checked = settings.L4D2;
+        textBoxMapList.Text = settings.MapList.NativeLine;
+        checkBoxSubtitle.Checked = settings.Subtitle;
+        checkBoxSCTools.Checked = settings.SCTools;
+        checkBoxRecompiled.Checked = settings.Recompiled;
+        textBoxWarning.Text = settings.Warning.NativeLine;
+      } catch (Exception ex) {
+        MessageBox.Show($"Error occurred while opening file: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
   }
 
-  private void buttonCopy_Click(object sender, EventArgs e) {
-    string preview = ReplaceNewLine(GetText(textBoxPreview));
-    if (preview.Length > 0) {
-      Clipboard.SetDataObject(preview, true);
-      MessageBox.Show("Copied Preview text.", "Copied", MessageBoxButtons.OK);
+  private void tsmiSave_Click(object sender, EventArgs e) {
+    DialogResult result = saveFileDialog.ShowDialog();
+    if (result == DialogResult.OK) {
+      DescriptionSettings settings = new DescriptionSettings {
+        Title = textBoxTitle.TrimmedText.UnixLine,
+        Author = textBoxAuthor.TrimmedText.UnixLine,
+        RDDate = comboBoxRDDate.SelectedIndex,
+        RDMonth = comboBoxRDMonth.SelectedIndex,
+        RDYear = comboBoxRDYear.SelectedIndex,
+        Description = textBoxDescription.TrimmedText.UnixLine,
+        Synopsis = textBoxSynopsis.TrimmedText.UnixLine,
+        HL2 = checkBoxHL2.Checked,
+        CSS = checkBoxCSS.Checked,
+        TF2 = checkBoxTF2.Checked,
+        L4D2 = checkBoxL4D2.Checked,
+        MapList = textBoxMapList.TrimmedText.UnixLine,
+        Subtitle = checkBoxSubtitle.Checked,
+        SCTools = checkBoxSCTools.Checked,
+        Recompiled = checkBoxRecompiled.Checked,
+        Warning = textBoxWarning.TrimmedText.UnixLine,
+      };
+      try {
+        string jsonString = JsonSerializer.Serialize(settings, jsonOpt);
+        File.WriteAllText(saveFileDialog.FileName, jsonString);
+        MessageBox.Show("Save complete", "SAVE SUCCESSFUL", MessageBoxButtons.OK, MessageBoxIcon.Information);
+      } catch (Exception ex) {
+        MessageBox.Show($"Error occurred while saving file: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+      }
     }
+  }
+
+  private void tsmiExit_Click(object sender, EventArgs e) {
+    Application.Exit();
   }
 }

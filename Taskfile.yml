@@ -40,6 +40,7 @@ tasks:
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.exe "$CS_DIST"'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.txt "$CS_DIST"'
   build:gmod-description-generator:
+    aliases: ["build:gdg", "build:gmod"]
     dir: gmod-description-generator
     env:
       CS_FRAMEWORK: net10.0-windows

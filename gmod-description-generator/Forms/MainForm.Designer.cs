@@ -1,7 +1,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace GModDescriptionGenerator;
+namespace GModDescriptionGenerator.Forms;
 
 partial class MainForm {
   private System.ComponentModel.IContainer components = null;
@@ -32,6 +32,11 @@ partial class MainForm {
     comboBoxRDDate = new ComboBox();
     comboBoxRDMonth = new ComboBox();
     comboBoxRDYear = new ComboBox();
+    fileToolStripMenuItem = new ToolStripMenuItem();
+    tsmiOpen = new ToolStripMenuItem();
+    tsmiSave = new ToolStripMenuItem();
+    sepSave = new ToolStripSeparator();
+    tsmiExit = new ToolStripMenuItem();
     groupBoxOption = new GroupBox();
     labelAuthor = new Label();
     labelDescription = new Label();
@@ -50,13 +55,17 @@ partial class MainForm {
     textBoxWarning = new TextBox();
     groupBoxPreview = new GroupBox();
     textBoxPreview = new TextBox();
+    menuStrip = new MenuStrip();
+    openFileDialog = new OpenFileDialog();
+    saveFileDialog = new SaveFileDialog();
     groupBoxOption.SuspendLayout();
     groupBoxPreview.SuspendLayout();
+    menuStrip.SuspendLayout();
     SuspendLayout();
     // 
     // buttonCopy
     // 
-    buttonCopy.Location = new Point(791, 709);
+    buttonCopy.Location = new Point(791, 724);
     buttonCopy.Name = "buttonCopy";
     buttonCopy.Size = new Size(75, 33);
     buttonCopy.TabIndex = 20;
@@ -66,7 +75,7 @@ partial class MainForm {
     // 
     // buttonGenerate
     // 
-    buttonGenerate.Location = new Point(872, 709);
+    buttonGenerate.Location = new Point(872, 724);
     buttonGenerate.Name = "buttonGenerate";
     buttonGenerate.Size = new Size(100, 33);
     buttonGenerate.TabIndex = 18;
@@ -76,7 +85,7 @@ partial class MainForm {
     // 
     // buttonReset
     // 
-    buttonReset.Location = new Point(12, 709);
+    buttonReset.Location = new Point(12, 724);
     buttonReset.Name = "buttonReset";
     buttonReset.Size = new Size(75, 33);
     buttonReset.TabIndex = 19;
@@ -186,6 +195,45 @@ partial class MainForm {
     comboBoxRDYear.Size = new Size(70, 25);
     comboBoxRDYear.TabIndex = 5;
     // 
+    // fileToolStripMenuItem
+    // 
+    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmiOpen, tsmiSave, sepSave, tsmiExit });
+    fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+    fileToolStripMenuItem.Size = new Size(37, 20);
+    fileToolStripMenuItem.Text = "&File";
+    // 
+    // tsmiOpen
+    // 
+    tsmiOpen.Name = "tsmiOpen";
+    tsmiOpen.ShortcutKeyDisplayString = "Ctrl + O";
+    tsmiOpen.ShortcutKeys = Keys.Control | Keys.O;
+    tsmiOpen.Size = new Size(154, 22);
+    tsmiOpen.Text = "&Open";
+    tsmiOpen.Click += tsmiOpen_Click;
+    // 
+    // tsmiSave
+    // 
+    tsmiSave.Name = "tsmiSave";
+    tsmiSave.ShortcutKeyDisplayString = "Ctrl + S";
+    tsmiSave.ShortcutKeys = Keys.Control | Keys.S;
+    tsmiSave.Size = new Size(154, 22);
+    tsmiSave.Text = "&Save";
+    tsmiSave.Click += tsmiSave_Click;
+    // 
+    // sepSave
+    // 
+    sepSave.Name = "sepSave";
+    sepSave.Size = new Size(151, 6);
+    // 
+    // tsmiExit
+    // 
+    tsmiExit.Name = "tsmiExit";
+    tsmiExit.ShortcutKeyDisplayString = "Alt + F4";
+    tsmiExit.ShortcutKeys = Keys.Alt | Keys.F4;
+    tsmiExit.Size = new Size(154, 22);
+    tsmiExit.Text = "&Exit";
+    tsmiExit.Click += tsmiExit_Click;
+    // 
     // groupBoxOption
     // 
     groupBoxOption.Controls.Add(checkBoxCSS);
@@ -213,7 +261,7 @@ partial class MainForm {
     groupBoxOption.Controls.Add(textBoxSynopsis);
     groupBoxOption.Controls.Add(textBoxTitle);
     groupBoxOption.Controls.Add(textBoxWarning);
-    groupBoxOption.Location = new Point(12, 12);
+    groupBoxOption.Location = new Point(12, 27);
     groupBoxOption.Name = "groupBoxOption";
     groupBoxOption.Size = new Size(477, 691);
     groupBoxOption.TabIndex = 1;
@@ -345,7 +393,7 @@ partial class MainForm {
     // groupBoxPreview
     // 
     groupBoxPreview.Controls.Add(textBoxPreview);
-    groupBoxPreview.Location = new Point(495, 12);
+    groupBoxPreview.Location = new Point(495, 27);
     groupBoxPreview.Name = "groupBoxPreview";
     groupBoxPreview.Size = new Size(477, 691);
     groupBoxPreview.TabIndex = 2;
@@ -355,27 +403,50 @@ partial class MainForm {
     // textBoxPreview
     // 
     textBoxPreview.BorderStyle = BorderStyle.None;
-    textBoxPreview.Location = new Point(6, 24);
+    textBoxPreview.Location = new Point(6, 21);
     textBoxPreview.Multiline = true;
     textBoxPreview.Name = "textBoxPreview";
     textBoxPreview.ReadOnly = true;
     textBoxPreview.ScrollBars = ScrollBars.Both;
-    textBoxPreview.Size = new Size(465, 661);
+    textBoxPreview.Size = new Size(465, 664);
     textBoxPreview.TabIndex = 17;
     textBoxPreview.WordWrap = false;
+    // 
+    // menuStrip
+    // 
+    menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+    menuStrip.Location = new Point(0, 0);
+    menuStrip.Name = "menuStrip";
+    menuStrip.Size = new Size(984, 24);
+    menuStrip.TabIndex = 21;
+    menuStrip.Text = "menuStrip1";
+    // 
+    // openFileDialog
+    // 
+    openFileDialog.AddToRecent = false;
+    openFileDialog.Filter = "JSON 파일 (*.json)|*.json|모든 파일 (*.*)|*.*";
+    // 
+    // saveFileDialog
+    // 
+    saveFileDialog.AddToRecent = false;
+    saveFileDialog.DefaultExt = "json";
+    saveFileDialog.Filter = "JSON 파일 (*.json)|*.json";
     // 
     // MainForm
     // 
     AutoScaleDimensions = new SizeF(7F, 17F);
     AutoScaleMode = AutoScaleMode.Font;
-    ClientSize = new Size(984, 754);
+    ClientSize = new Size(984, 769);
     Controls.Add(buttonCopy);
     Controls.Add(buttonGenerate);
     Controls.Add(buttonReset);
     Controls.Add(groupBoxOption);
     Controls.Add(groupBoxPreview);
+    Controls.Add(menuStrip);
     Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
     FormBorderStyle = FormBorderStyle.FixedDialog;
+    KeyPreview = true;
+    MainMenuStrip = menuStrip;
     MaximizeBox = false;
     Name = "MainForm";
     StartPosition = FormStartPosition.CenterScreen;
@@ -384,7 +455,10 @@ partial class MainForm {
     groupBoxOption.PerformLayout();
     groupBoxPreview.ResumeLayout(false);
     groupBoxPreview.PerformLayout();
+    menuStrip.ResumeLayout(false);
+    menuStrip.PerformLayout();
     ResumeLayout(false);
+    PerformLayout();
   }
   #endregion
 
@@ -412,6 +486,9 @@ partial class MainForm {
   private Label labelSynopsis;
   private Label labelTitle;
   private Label labelWarning;
+  private MenuStrip menuStrip;
+  private OpenFileDialog openFileDialog;
+  private SaveFileDialog saveFileDialog;
   private TextBox textBoxAuthor;
   private TextBox textBoxDescription;
   private TextBox textBoxMapList;
@@ -419,4 +496,9 @@ partial class MainForm {
   private TextBox textBoxSynopsis;
   private TextBox textBoxTitle;
   private TextBox textBoxWarning;
+  private ToolStripMenuItem fileToolStripMenuItem;
+  private ToolStripMenuItem tsmiExit;
+  private ToolStripMenuItem tsmiOpen;
+  private ToolStripMenuItem tsmiSave;
+  private ToolStripSeparator sepSave;
 }

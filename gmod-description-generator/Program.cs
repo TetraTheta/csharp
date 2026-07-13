@@ -1,6 +1,8 @@
 using System;
 using System.Windows.Forms;
 
+using GModDescriptionGenerator.Forms;
+
 namespace GModDescriptionGenerator;
 
 internal static class Program {
