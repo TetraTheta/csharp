@@ -27,6 +27,47 @@ public partial class MainForm : Form {
 
     openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
     saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+    RegisterDragDrop(this);
+  }
+
+  private void OpenFile(string filePath) {
+    try {
+      string jsonString = File.ReadAllText(filePath);
+      DescriptionSettings settings = JsonSerializer.Deserialize<DescriptionSettings>(jsonString);
+      if (settings == null) throw new InvalidDataException("Could not parse JSON file content");
+      settings.TrimAll();
+      // sanitize Release Date
+      settings.RDDate = (settings.RDDate >= 0 && settings.RDDate < comboBoxRDDate.Items.Count) ? settings.RDDate : 0;
+      settings.RDMonth = (settings.RDMonth >= 0 && settings.RDMonth < comboBoxRDMonth.Items.Count) ? settings.RDMonth : 0;
+      settings.RDYear = (settings.RDYear >= 0 && settings.RDYear < comboBoxRDYear.Items.Count) ? settings.RDYear : 0;
+      // apply data
+      textBoxTitle.Text = settings.Title.NativeLine;
+      textBoxAuthor.Text = settings.Author.NativeLine;
+      comboBoxRDDate.SelectedIndex = settings.RDDate;
+      comboBoxRDMonth.SelectedIndex = settings.RDMonth;
+      comboBoxRDYear.SelectedIndex = settings.RDYear;
+      textBoxDescription.Text = settings.Description.NativeLine;
+      textBoxSynopsis.Text = settings.Synopsis.NativeLine;
+      checkBoxHL2.Checked = settings.HL2;
+      checkBoxCSS.Checked = settings.CSS;
+      checkBoxTF2.Checked = settings.TF2;
+      checkBoxL4D2.Checked = settings.L4D2;
+      textBoxMapList.Text = settings.MapList.NativeLine;
+      checkBoxSubtitle.Checked = settings.Subtitle;
+      checkBoxSCTools.Checked = settings.SCTools;
+      checkBoxRecompiled.Checked = settings.Recompiled;
+      textBoxWarning.Text = settings.Warning.NativeLine;
+    } catch (Exception ex) {
+      MessageBox.Show($"Error occurred while opening file: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+    }
+  }
+
+  private void RegisterDragDrop(Control ctrl) {
+    ctrl.AllowDrop = true;
+    ctrl.DragEnter += MainForm_DragEnter;
+    ctrl.DragDrop += MainForm_DragDrop;
+    foreach (Control c in ctrl.Controls) RegisterDragDrop(c);
   }
 
   private void buttonReset_Click(object sender, EventArgs e) {
@@ -139,37 +180,7 @@ public partial class MainForm : Form {
 
   private void tsmiOpen_Click(object sender, EventArgs e) {
     DialogResult result = openFileDialog.ShowDialog();
-    if (result == DialogResult.OK) {
-      try {
-        string jsonString = File.ReadAllText(openFileDialog.FileName);
-        DescriptionSettings settings = JsonSerializer.Deserialize<DescriptionSettings>(jsonString);
-        if (settings == null) throw new InvalidDataException("Could not parse JSON file content");
-        settings.TrimAll();
-        // sanitize Release Date
-        settings.RDDate = (settings.RDDate >= 0 && settings.RDDate < comboBoxRDDate.Items.Count) ? settings.RDDate : 0;
-        settings.RDMonth = (settings.RDMonth >= 0 && settings.RDMonth < comboBoxRDMonth.Items.Count) ? settings.RDMonth : 0;
-        settings.RDYear = (settings.RDYear >= 0 && settings.RDYear < comboBoxRDYear.Items.Count) ? settings.RDYear : 0;
-        // apply data
-        textBoxTitle.Text = settings.Title.NativeLine;
-        textBoxAuthor.Text = settings.Author.NativeLine;
-        comboBoxRDDate.SelectedIndex = settings.RDDate;
-        comboBoxRDMonth.SelectedIndex = settings.RDMonth;
-        comboBoxRDYear.SelectedIndex = settings.RDYear;
-        textBoxDescription.Text = settings.Description.NativeLine;
-        textBoxSynopsis.Text = settings.Synopsis.NativeLine;
-        checkBoxHL2.Checked = settings.HL2;
-        checkBoxCSS.Checked = settings.CSS;
-        checkBoxTF2.Checked = settings.TF2;
-        checkBoxL4D2.Checked = settings.L4D2;
-        textBoxMapList.Text = settings.MapList.NativeLine;
-        checkBoxSubtitle.Checked = settings.Subtitle;
-        checkBoxSCTools.Checked = settings.SCTools;
-        checkBoxRecompiled.Checked = settings.Recompiled;
-        textBoxWarning.Text = settings.Warning.NativeLine;
-      } catch (Exception ex) {
-        MessageBox.Show($"Error occurred while opening file: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-      }
-    }
+    if (result == DialogResult.OK) OpenFile(openFileDialog.FileName);
   }
 
   private void tsmiSave_Click(object sender, EventArgs e) {
@@ -205,5 +216,26 @@ public partial class MainForm : Form {
 
   private void tsmiExit_Click(object sender, EventArgs e) {
     Application.Exit();
+  }
+
+  private void MainForm_DragEnter(object sender, DragEventArgs e) {
+    if (!e.Data.GetDataPresent(DataFormats.FileDrop)) {
+      e.Effect = DragDropEffects.None;
+      return;
+    }
+    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+    if (files.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase)) {
+      e.Effect = DragDropEffects.Copy;
+    } else {
+      e.Effect = DragDropEffects.None;
+    }
+  }
+
+  private void MainForm_DragDrop(object sender, DragEventArgs e) {
+    if (!e.Data.GetDataPresent(DataFormats.FileDrop)) return;
+    string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+    if (files.Length == 1 && Path.GetExtension(files[0]).Equals(".json", StringComparison.OrdinalIgnoreCase)) {
+      OpenFile(files[0]);
+    }
   }
 }
