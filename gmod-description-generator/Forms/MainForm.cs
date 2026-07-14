@@ -58,6 +58,14 @@ public partial class MainForm : Form {
       checkBoxSCTools.Checked = settings.SCTools;
       checkBoxRecompiled.Checked = settings.Recompiled;
       textBoxWarning.Text = settings.Warning.NativeLine;
+      // set save
+      saveFileDialog.FileName = filePath;
+      // set directory
+      string dir = Path.GetDirectoryName(filePath);
+      if (!string.IsNullOrEmpty(dir)) {
+        openFileDialog.InitialDirectory = dir;
+        saveFileDialog.InitialDirectory = dir;
+      }
     } catch (Exception ex) {
       MessageBox.Show($"Error occurred while opening file: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
     }
@@ -207,6 +215,12 @@ public partial class MainForm : Form {
       try {
         string jsonString = JsonSerializer.Serialize(settings, jsonOpt);
         File.WriteAllText(saveFileDialog.FileName, jsonString);
+        // set directory
+        string dir = Path.GetDirectoryName(saveFileDialog.FileName);
+        if (!string.IsNullOrEmpty(dir)) {
+          openFileDialog.InitialDirectory = dir;
+          saveFileDialog.InitialDirectory = dir;
+        }
         MessageBox.Show("Save complete", "SAVE SUCCESSFUL", MessageBoxButtons.OK, MessageBoxIcon.Information);
       } catch (Exception ex) {
         MessageBox.Show($"Error occurred while saving file: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
