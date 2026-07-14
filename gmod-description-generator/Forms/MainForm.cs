@@ -86,7 +86,7 @@ public partial class MainForm : Form {
       if (tf2) sb.Append("  [*]Team Fortress 2\n");
       if (l4d2) sb.Append("  [*]Left 4 Dead 2\n");
       sb.Append("[/list]\n");
-      sb.Append("[u]You should mount them anyway, because assets that are included in Garry's Mod doesn't have [b]music[/b] or voice-over.[/u]\n");
+      sb.Append("[u]Mount them anyway; Garry's Mod's default assets lack [b]music and voice-overs[/b].[/u]\n");
     }
     // Map List
     string[] lines = textBoxMapList.TrimmedLines;
@@ -98,20 +98,20 @@ public partial class MainForm : Form {
     }
     // Recommendations
     sb.Append("[h2]Recommendations[/h2]\n");
-    sb.Append("To avoid CTD(Crash To Desktop) or frame drop, please follow these instructions:\n");
+    sb.Append("To prevent CTD or frame drops, follow these steps:\n");
     sb.Append("[list]\n");
-    sb.Append("  [*]Use the 'x86-64' branch of Garry's Mod if you are using 64-bit OS (You would already using 64-bit OS).\n");
-    sb.Append("  [*]Keep enabled add-ons minimum. Disable or unsubscribe add-ons you don't use.\n");
-    sb.Append("  [*](only if the game is still broken) Factory reset Garry's Mod.\n");
+    sb.Append("  [*]Use 'x86-64' beta for 64-bit Garry's Mod.\n");
+    sb.Append("  [*]Disable or unsubscribe from non-essential add-ons.\n");
+    sb.Append("  [*]If the game is still broken, factory reset it.\n");
     sb.Append("[/list]\n");
-    sb.Append("I didn't experience any frame drops or CTD while testing this map, so if you experienced any, that would be your environment's problem, which I can't fix.\n");
+    sb.Append("The maps tested fine without lags or CTDs. Any issues you face are likely system-specific, which unfortunately I can't fix.\n");
     if (checkBoxSCTools.Checked) {
-      sb.Append("\nYou should also subscribe [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3207465120]SC Tools[/url] for level transition. You can still play the map without it, but you won't have any level transition.\n");
+      sb.Append("\n[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3207465120]SC Tools[/url] is required for level transitions. You can still play without it, but transitions won't work.\n");
     } else {
-      sb.Append("\nI personally recommend you to also subscribe [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3207465120]SC Tools[/url] for [i]better[/i] experience.\n");
+      sb.Append("\nI highly recommend subscribing to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3207465120]SC Tools[/url] for a [i]better[/i] experience.\n");
     }
     if (checkBoxSubtitle.Checked) {
-      sb.Append("\nYou can get Closed Caption if you subscribe [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3311765429]Simplest Subtitles Framework[/url]. I highly recommend you to subscribe it.\n");
+      sb.Append("\nSubscribe to [url=https://steamcommunity.com/sharedfiles/filedetails/?id=3311765429]Simplest Subtitles Framework[/url] for closed captions (highly recommended).\n");
     }
     // Warning
     bool recompiled = checkBoxRecompiled.Checked;
@@ -119,8 +119,8 @@ public partial class MainForm : Form {
     if (recompiled || warning.Length > 0) {
       sb.Append("[h2]Warning[/h2]\n");
       if (recompiled) {
-        sb.Append("This add-on contains recompiled map(s), which was necessary to fix and optimize the map(s).\n");
-        sb.Append("If you find any glitch or weird thing(s) that aren't in the original map(s), please report to me. I'll see if I can fix it or not.\n");
+        sb.Append("This add-on includes recompiled maps for fixes and optimization.\n");
+        sb.Append("Please report any [b]new[/b] glitches or issues; I will try to fix them.\n");
       }
       if (warning.Length > 0) {
         if (recompiled) sb.Append("\n");
@@ -129,8 +129,8 @@ public partial class MainForm : Form {
     }
     // Disclaimer
     sb.Append("[h2]Disclaimer[/h2]\n");
-    sb.Append("I only test map(s) with Sandbox gamemode with Singleplay environment. I do not guarantee that this add-on will work with any gamemode or Multiplay environment.\n\n");
-    sb.Append("I didn't make these map(s). I just [i]ported[/i] these map(s) to Garry's Mod. All credits should go to original author(s).\n");
+    sb.Append("Tested only in Singleplayer Sandbox. Compatibility with other gamemodes or Multiplayer is not guaranteed.\n\n");
+    sb.Append("I did not create these maps; I only [i]ported[/i] them to Garry's Mod. All credit goes to the original authors.\n");
     // Search Tag
     sb.Append("[hr][/hr]Search Tag: [spoiler]half life hl2 custom campaign[/spoiler]");
 
