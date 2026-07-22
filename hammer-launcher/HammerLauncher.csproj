@@ -3,15 +3,17 @@
     <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <OutputType>WinExe</OutputType>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <!-- Code Style -->
+    <AnalysisLevel>latest</AnalysisLevel>
     <DebugType>none</DebugType>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
-    <Nullable>enable</Nullable>
     <!-- Assembly Information -->
     <AssemblyTitle>HammerLauncher</AssemblyTitle>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
     <Company>TetraTheta</Company>
     <Copyright>Copyright (c) TetraTheta All rights reserved</Copyright>
     <Description>Open Hammer Editor</Description>
@@ -22,27 +24,39 @@
     <Product>$(AssemblyTitle)</Product>
     <Title>$(AssemblyTitle)</Title>
     <!-- Publish -->
-    <PublishSingleFile>true</PublishSingleFile>
     <!--
-    <PublishTrimmed>true</PublishTrimmed>
-    <SelfContained>true</SelfContained>
-    <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
-    -->
+    <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
+    -->
+    <!-- NativeAOT Publish is enabled explicitly during publish -->
+    <PublishAot>false</PublishAot>
+    <CustomResourceTypesSupport>true</CustomResourceTypesSupport>
+    <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Resources\MainIcon.ico" />
-    <Content Include="Resources\game_gmod_32.png" />
-    <Content Include="Resources\game_gmod_gray_32.png" />
-    <Content Include="Resources\game_hl2_32.png" />
-    <Content Include="Resources\game_hl2_gray_32.png" />
-    <Content Include="Resources\hammer_gmod_32.png" />
-    <Content Include="Resources\hammer_hl2_32.png" />
-    <Content Include="Resources\hammer_hpp_32.png" />
+    <EmbeddedResource Include="Resources\MainIcon.ico" />
+    <EmbeddedResource Include="Resources\game_gmod_32.png" />
+    <EmbeddedResource Include="Resources\game_gmod_gray_32.png" />
+    <EmbeddedResource Include="Resources\game_hl2_32.png" />
+    <EmbeddedResource Include="Resources\game_hl2_gray_32.png" />
+    <EmbeddedResource Include="Resources\hammer_gmod_32.png" />
+    <EmbeddedResource Include="Resources\hammer_hl2_32.png" />
+    <EmbeddedResource Include="Resources\hammer_hpp_32.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Forms\Launcher.Designer.cs">
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

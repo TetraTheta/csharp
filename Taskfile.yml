@@ -49,11 +49,12 @@ tasks:
       - 'mkdir "$CS_DIST" 2> /dev/null'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/GModDescriptionGenerator.exe "$CS_DIST"'
   build:hammer-launcher:
+    aliases: ["build:hammer"]
     dir: hammer-launcher
     env:
       CS_FRAMEWORK: net10.0-windows
     cmds:
-      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET -p:PublishAot=true'
       - 'mkdir "$CS_DIST" 2> /dev/null'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/HammerLauncher.exe "$CS_DIST"'
   build:pathed:

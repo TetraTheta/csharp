@@ -1,16 +1,14 @@
-using Microsoft.Win32;
+#nullable enable
 using System;
 using System.Windows.Forms;
 
-namespace HammerLauncher.Libraries {
-public static class SteamRegistry {
-  public static string GetHl2InstallPath() {
-    return GetRegistryPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 220");
-  }
+using Microsoft.Win32;
 
-  public static string GetGModInstallPath() {
-    return GetRegistryPath("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Steam App 4000");
-  }
+namespace HammerLauncher.Libraries;
+
+public static class SteamRegistry {
+  public static string GetHL2InstallPath() => GetRegistryPath(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 220");
+  public static string GetGModInstallPath() => GetRegistryPath(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Steam App 4000");
 
   private static string GetRegistryPath(string path) {
     try {
@@ -18,10 +16,8 @@ public static class SteamRegistry {
       using RegistryKey? key = hklm64.OpenSubKey(path, false);
       return key?.GetValue("InstallLocation") as string ?? string.Empty;
     } catch (Exception e) {
-      // ReSharper disable once LocalizableElement
-      MessageBox.Show($"Could not open '{path}':\n{e.Message}");
+      _ = MessageBox.Show($"Could not open '{path}':\n{e.Message}");
       return string.Empty;
     }
   }
-}
 }

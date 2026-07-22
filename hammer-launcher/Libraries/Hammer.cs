@@ -1,32 +1,32 @@
-using System.IO;
+﻿using System.IO;
 
-namespace HammerLauncher.Libraries {
+namespace HammerLauncher.Libraries;
+
 public static class Hammer {
-  private static readonly string Hl2BasePath = SteamRegistry.GetHl2InstallPath();
+  private static readonly string HL2BasePath = SteamRegistry.GetHL2InstallPath();
   private static readonly string GModBasePath = SteamRegistry.GetGModInstallPath();
 
-  public static string GetHl2H() {
-    if (string.IsNullOrWhiteSpace(Hl2BasePath)) return string.Empty;
-    string path = Path.Combine(Hl2BasePath, "bin", "hammer.exe");
+  public static string GetHL2Hammer() {
+    if (string.IsNullOrWhiteSpace(HL2BasePath)) return string.Empty;
+    string path = Path.Combine(HL2BasePath, "bin", "hammer.exe");
     return File.Exists(path) ? path : string.Empty;
   }
 
-  public static string GetHl2Hpp() {
-    if (string.IsNullOrWhiteSpace(Hl2BasePath)) return string.Empty;
-    string path = Path.Combine(Hl2BasePath, "bin", "hammerplusplus.exe");
+  public static string GetHL2HammerPP() {
+    if (string.IsNullOrWhiteSpace(HL2BasePath)) return string.Empty;
+    string path = Path.Combine(HL2BasePath, "bin", "hammerplusplus.exe");
     return File.Exists(path) ? path : string.Empty;
   }
 
-  public static string GetGModH() {
+  public static string GetGModHammer() {
     if (string.IsNullOrWhiteSpace(GModBasePath)) return string.Empty;
     string path = Path.Combine(GModBasePath, "bin", "hammer.exe");
     return File.Exists(path) ? path : string.Empty;
   }
 
-  public static string GetGModHpp() {
+  public static string GetGModHammerPP() {
     if (string.IsNullOrWhiteSpace(GModBasePath)) return string.Empty;
     string path = Path.Combine(GModBasePath, "bin", "win64", "hammerplusplus.exe");
     return File.Exists(path) ? path : string.Empty;
   }
-}
 }

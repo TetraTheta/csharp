@@ -1,8 +1,10 @@
-using System;
+﻿using System;
 using System.Windows.Forms;
+
 using HammerLauncher.Forms;
 
-namespace HammerLauncher {
+namespace HammerLauncher;
+
 internal static class Program {
   [STAThread]
   private static void Main(string[] args) {
@@ -14,5 +16,4 @@ internal static class Program {
     Application.SetColorMode(SystemColorMode.Dark);
     Application.Run(new Launcher(file));
   }
-}
 }
