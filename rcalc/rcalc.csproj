@@ -6,9 +6,10 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <!-- Code Style -->
+    <AnalysisLevel>latest</AnalysisLevel>
     <DebugType>none</DebugType>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
-    <Nullable>enable</Nullable>
     <!-- Assembly Information -->
     <AssemblyTitle>rcalc</AssemblyTitle>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
@@ -22,20 +23,32 @@
     <Product>$(AssemblyTitle)</Product>
     <Title>$(AssemblyTitle)</Title>
     <!-- Publish -->
-    <PublishSingleFile>true</PublishSingleFile>
     <!--
-    <PublishTrimmed>true</PublishTrimmed>
-    <SelfContained>true</SelfContained>
-    <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
-    -->
+    <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
+    -->
+    <!-- NativeAOT Publish is enabled explicitly during publish -->
+    <PublishAot>false</PublishAot>
+    <CustomResourceTypesSupport>true</CustomResourceTypesSupport>
+    <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="Resources\MainIcon.ico" />
+    <EmbeddedResource Include="Resources\MainIcon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Forms\CalculatorForm.Designer.cs">
       <DependentUpon>CalculatorForm.cs</DependentUpon>
     </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>

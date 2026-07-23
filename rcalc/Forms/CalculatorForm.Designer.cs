@@ -1,241 +1,202 @@
+using System.Windows.Forms;
+
 using rcalc.Libraries;
+using rcalc.Properties;
 
-namespace rcalc.Forms
-{
-  partial class CalculatorForm
-  {
-    /// <summary>
-    /// 필수 디자이너 변수입니다.
-    /// </summary>
-    private System.ComponentModel.IContainer components = null;
+namespace rcalc.Forms;
 
-    /// <summary>
-    /// 사용 중인 모든 리소스를 정리합니다.
-    /// </summary>
-    /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
-    protected override void Dispose(bool disposing)
-    {
-      if (disposing && (components != null))
-      {
-        components.Dispose();
-      }
-      base.Dispose(disposing);
-    }
+partial class CalculatorForm {
+  /// <summary>
+  /// 필수 디자이너 변수입니다.
+  /// </summary>
+  private System.ComponentModel.IContainer components = null;
 
-    #region Windows Form 디자이너에서 생성한 코드
-
-    /// <summary>
-    /// 디자이너 지원에 필요한 메서드입니다.
-    /// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
-    /// </summary>
-    private void InitializeComponent()
-    {
-            this.labelX = new System.Windows.Forms.Label();
-            this.labelY = new System.Windows.Forms.Label();
-            this.labelA = new System.Windows.Forms.Label();
-            this.labelB = new System.Windows.Forms.Label();
-            this.buttonCalculate = new System.Windows.Forms.Button();
-            this.textBoxResult = new System.Windows.Forms.TextBox();
-            this.listBoxResult = new System.Windows.Forms.ListBox();
-            this.numericUpDownX = new CleanNumericUpDown();
-            this.numericUpDownY = new CleanNumericUpDown();
-            this.numericUpDownA = new CleanNumericUpDown();
-            this.numericUpDownB = new CleanNumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownX)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownY)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownA)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB)).BeginInit();
-            this.SuspendLayout();
-            //
-            // labelX
-            //
-            this.labelX.AutoSize = true;
-            this.labelX.Location = new System.Drawing.Point(12, 9);
-            this.labelX.Name = "labelX";
-            this.labelX.Size = new System.Drawing.Size(17, 19);
-            this.labelX.TabIndex = 0;
-            this.labelX.Text = "X";
-            //
-            // labelY
-            //
-            this.labelY.AutoSize = true;
-            this.labelY.Location = new System.Drawing.Point(181, 9);
-            this.labelY.Name = "labelY";
-            this.labelY.Size = new System.Drawing.Size(17, 19);
-            this.labelY.TabIndex = 1;
-            this.labelY.Text = "Y";
-            //
-            // labelA
-            //
-            this.labelA.AutoSize = true;
-            this.labelA.Location = new System.Drawing.Point(12, 42);
-            this.labelA.Name = "labelA";
-            this.labelA.Size = new System.Drawing.Size(18, 19);
-            this.labelA.TabIndex = 2;
-            this.labelA.Text = "A";
-            //
-            // labelB
-            //
-            this.labelB.AutoSize = true;
-            this.labelB.Location = new System.Drawing.Point(181, 42);
-            this.labelB.Name = "labelB";
-            this.labelB.Size = new System.Drawing.Size(17, 19);
-            this.labelB.TabIndex = 3;
-            this.labelB.Text = "B";
-            //
-            // buttonCalculate
-            //
-            this.buttonCalculate.Location = new System.Drawing.Point(341, 7);
-            this.buttonCalculate.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.buttonCalculate.Name = "buttonCalculate";
-            this.buttonCalculate.Size = new System.Drawing.Size(131, 58);
-            this.buttonCalculate.TabIndex = 8;
-            this.buttonCalculate.Text = "Calculate";
-            this.buttonCalculate.UseVisualStyleBackColor = true;
-            this.buttonCalculate.Click += new System.EventHandler(this.ButtonCalculate_Click);
-            //
-            // textBoxResult
-            //
-            this.textBoxResult.Location = new System.Drawing.Point(10, 73);
-            this.textBoxResult.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.textBoxResult.Name = "textBoxResult";
-            this.textBoxResult.ReadOnly = true;
-            this.textBoxResult.Size = new System.Drawing.Size(462, 25);
-            this.textBoxResult.TabIndex = 9;
-            //
-            // listBoxResult
-            //
-            this.listBoxResult.FormattingEnabled = true;
-            this.listBoxResult.ItemHeight = 17;
-            this.listBoxResult.Location = new System.Drawing.Point(10, 105);
-            this.listBoxResult.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.listBoxResult.Name = "listBoxResult";
-            this.listBoxResult.Size = new System.Drawing.Size(462, 293);
-            this.listBoxResult.TabIndex = 10;
-            this.listBoxResult.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.ListBoxResult_MouseDoubleClick);
-            //
-            // numericUpDownX
-            //
-            this.numericUpDownX.DecimalPlaces = 2;
-            this.numericUpDownX.Location = new System.Drawing.Point(35, 7);
-            this.numericUpDownX.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.numericUpDownX.Maximum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            0});
-            this.numericUpDownX.Minimum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            -2147483648});
-            this.numericUpDownX.Name = "numericUpDownX";
-            this.numericUpDownX.Size = new System.Drawing.Size(131, 25);
-            this.numericUpDownX.TabIndex = 11;
-            //
-            // numericUpDownY
-            //
-            this.numericUpDownY.DecimalPlaces = 2;
-            this.numericUpDownY.Location = new System.Drawing.Point(204, 7);
-            this.numericUpDownY.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.numericUpDownY.Maximum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            0});
-            this.numericUpDownY.Minimum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            -2147483648});
-            this.numericUpDownY.Name = "numericUpDownY";
-            this.numericUpDownY.Size = new System.Drawing.Size(131, 25);
-            this.numericUpDownY.TabIndex = 12;
-            //
-            // numericUpDownA
-            //
-            this.numericUpDownA.DecimalPlaces = 2;
-            this.numericUpDownA.Location = new System.Drawing.Point(35, 40);
-            this.numericUpDownA.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.numericUpDownA.Maximum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            0});
-            this.numericUpDownA.Minimum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            -2147483648});
-            this.numericUpDownA.Name = "numericUpDownA";
-            this.numericUpDownA.Size = new System.Drawing.Size(131, 25);
-            this.numericUpDownA.TabIndex = 13;
-            //
-            // numericUpDownB
-            //
-            this.numericUpDownB.DecimalPlaces = 3;
-            this.numericUpDownB.Location = new System.Drawing.Point(204, 40);
-            this.numericUpDownB.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.numericUpDownB.Maximum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            0});
-            this.numericUpDownB.Minimum = new decimal(new int[] {
-            -1486618625,
-            232830643,
-            0,
-            -2147483648});
-            this.numericUpDownB.Name = "numericUpDownB";
-            this.numericUpDownB.ReadOnly = true;
-            this.numericUpDownB.Size = new System.Drawing.Size(130, 25);
-            this.numericUpDownB.TabIndex = 14;
-            //
-            // CalculatorForm
-            //
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(484, 411);
-            this.Controls.Add(this.numericUpDownB);
-            this.Controls.Add(this.numericUpDownA);
-            this.Controls.Add(this.numericUpDownY);
-            this.Controls.Add(this.numericUpDownX);
-            this.Controls.Add(this.listBoxResult);
-            this.Controls.Add(this.textBoxResult);
-            this.Controls.Add(this.buttonCalculate);
-            this.Controls.Add(this.labelB);
-            this.Controls.Add(this.labelA);
-            this.Controls.Add(this.labelY);
-            this.Controls.Add(this.labelX);
-            this.Font = new System.Drawing.Font("맑은 고딕", 10F);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Icon = global::rcalc.Properties.Resources.MainIcon;
-            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.Name = "CalculatorForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "rcalc";
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownX)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownY)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownA)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownB)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
-    }
-
-    #endregion
-
-    private System.Windows.Forms.Label labelX;
-    private System.Windows.Forms.Label labelY;
-    private System.Windows.Forms.Label labelA;
-    private System.Windows.Forms.Label labelB;
-    private System.Windows.Forms.Button buttonCalculate;
-    private System.Windows.Forms.TextBox textBoxResult;
-    private System.Windows.Forms.ListBox listBoxResult;
-    private CleanNumericUpDown numericUpDownX;
-    private CleanNumericUpDown numericUpDownY;
-    private CleanNumericUpDown numericUpDownA;
-    private CleanNumericUpDown numericUpDownB;
+  /// <summary>
+  /// 사용 중인 모든 리소스를 정리합니다.
+  /// </summary>
+  /// <param name="disposing">관리되는 리소스를 삭제해야 하면 true이고, 그렇지 않으면 false입니다.</param>
+  protected override void Dispose(bool disposing) {
+    if (disposing && (components != null)) components.Dispose();
+    base.Dispose(disposing);
   }
-}
 
+  #region Windows Form 디자이너에서 생성한 코드
+
+  /// <summary>
+  /// 디자이너 지원에 필요한 메서드입니다.
+  /// 이 메서드의 내용을 코드 편집기로 수정하지 마세요.
+  /// </summary>
+  private void InitializeComponent() {
+    buttonCalculate = new Button();
+    labelA = new Label();
+    labelB = new Label();
+    labelX = new Label();
+    labelY = new Label();
+    listBoxResult = new ListBox();
+    numericUpDownA = new CleanNumericUpDown();
+    numericUpDownB = new CleanNumericUpDown();
+    numericUpDownX = new CleanNumericUpDown();
+    numericUpDownY = new CleanNumericUpDown();
+    textBoxResult = new TextBox();
+    ((System.ComponentModel.ISupportInitialize)numericUpDownA).BeginInit();
+    ((System.ComponentModel.ISupportInitialize)numericUpDownB).BeginInit();
+    ((System.ComponentModel.ISupportInitialize)numericUpDownX).BeginInit();
+    ((System.ComponentModel.ISupportInitialize)numericUpDownY).BeginInit();
+    SuspendLayout();
+    // 
+    // buttonCalculate
+    // 
+    buttonCalculate.Location = new System.Drawing.Point(341, 7);
+    buttonCalculate.Margin = new Padding(3, 4, 3, 4);
+    buttonCalculate.Name = "buttonCalculate";
+    buttonCalculate.Size = new System.Drawing.Size(131, 58);
+    buttonCalculate.TabIndex = 8;
+    buttonCalculate.Text = "Calculate";
+    buttonCalculate.UseVisualStyleBackColor = true;
+    buttonCalculate.Click += ButtonCalculate_Click;
+    // 
+    // labelA
+    // 
+    labelA.AutoSize = true;
+    labelA.Location = new System.Drawing.Point(12, 42);
+    labelA.Name = "labelA";
+    labelA.Size = new System.Drawing.Size(18, 19);
+    labelA.TabIndex = 2;
+    labelA.Text = "A";
+    // 
+    // labelB
+    // 
+    labelB.AutoSize = true;
+    labelB.Location = new System.Drawing.Point(181, 42);
+    labelB.Name = "labelB";
+    labelB.Size = new System.Drawing.Size(17, 19);
+    labelB.TabIndex = 3;
+    labelB.Text = "B";
+    // 
+    // labelX
+    // 
+    labelX.AutoSize = true;
+    labelX.Location = new System.Drawing.Point(12, 9);
+    labelX.Name = "labelX";
+    labelX.Size = new System.Drawing.Size(17, 19);
+    labelX.TabIndex = 0;
+    labelX.Text = "X";
+    // 
+    // labelY
+    // 
+    labelY.AutoSize = true;
+    labelY.Location = new System.Drawing.Point(181, 9);
+    labelY.Name = "labelY";
+    labelY.Size = new System.Drawing.Size(17, 19);
+    labelY.TabIndex = 1;
+    labelY.Text = "Y";
+    // 
+    // listBoxResult
+    // 
+    listBoxResult.FormattingEnabled = true;
+    listBoxResult.Location = new System.Drawing.Point(10, 105);
+    listBoxResult.Margin = new Padding(3, 4, 3, 4);
+    listBoxResult.Name = "listBoxResult";
+    listBoxResult.Size = new System.Drawing.Size(462, 293);
+    listBoxResult.TabIndex = 10;
+    listBoxResult.MouseDoubleClick += ListBoxResult_MouseDoubleClick;
+    // 
+    // numericUpDownA
+    // 
+    numericUpDownA.DecimalPlaces = 2;
+    numericUpDownA.Location = new System.Drawing.Point(35, 40);
+    numericUpDownA.Margin = new Padding(3, 4, 3, 4);
+    numericUpDownA.Maximum = new decimal(new int[] { -1486618625, 232830643, 0, 0 });
+    numericUpDownA.Minimum = new decimal(new int[] { -1486618625, 232830643, 0, int.MinValue });
+    numericUpDownA.Name = "numericUpDownA";
+    numericUpDownA.Size = new System.Drawing.Size(131, 25);
+    numericUpDownA.TabIndex = 13;
+    // 
+    // numericUpDownB
+    // 
+    numericUpDownB.DecimalPlaces = 3;
+    numericUpDownB.Location = new System.Drawing.Point(204, 40);
+    numericUpDownB.Margin = new Padding(3, 4, 3, 4);
+    numericUpDownB.Maximum = new decimal(new int[] { -1486618625, 232830643, 0, 0 });
+    numericUpDownB.Minimum = new decimal(new int[] { -1486618625, 232830643, 0, int.MinValue });
+    numericUpDownB.Name = "numericUpDownB";
+    numericUpDownB.ReadOnly = true;
+    numericUpDownB.Size = new System.Drawing.Size(130, 25);
+    numericUpDownB.TabIndex = 14;
+    // 
+    // numericUpDownX
+    // 
+    numericUpDownX.DecimalPlaces = 2;
+    numericUpDownX.Location = new System.Drawing.Point(35, 7);
+    numericUpDownX.Margin = new Padding(3, 4, 3, 4);
+    numericUpDownX.Maximum = new decimal(new int[] { -1486618625, 232830643, 0, 0 });
+    numericUpDownX.Minimum = new decimal(new int[] { -1486618625, 232830643, 0, int.MinValue });
+    numericUpDownX.Name = "numericUpDownX";
+    numericUpDownX.Size = new System.Drawing.Size(131, 25);
+    numericUpDownX.TabIndex = 11;
+    // 
+    // numericUpDownY
+    // 
+    numericUpDownY.DecimalPlaces = 2;
+    numericUpDownY.Location = new System.Drawing.Point(204, 7);
+    numericUpDownY.Margin = new Padding(3, 4, 3, 4);
+    numericUpDownY.Maximum = new decimal(new int[] { -1486618625, 232830643, 0, 0 });
+    numericUpDownY.Minimum = new decimal(new int[] { -1486618625, 232830643, 0, int.MinValue });
+    numericUpDownY.Name = "numericUpDownY";
+    numericUpDownY.Size = new System.Drawing.Size(131, 25);
+    numericUpDownY.TabIndex = 12;
+    // 
+    // textBoxResult
+    // 
+    textBoxResult.Location = new System.Drawing.Point(10, 73);
+    textBoxResult.Margin = new Padding(3, 4, 3, 4);
+    textBoxResult.Name = "textBoxResult";
+    textBoxResult.ReadOnly = true;
+    textBoxResult.Size = new System.Drawing.Size(462, 25);
+    textBoxResult.TabIndex = 9;
+    // 
+    // CalculatorForm
+    // 
+    AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
+    AutoScaleMode = AutoScaleMode.Font;
+    ClientSize = new System.Drawing.Size(484, 411);
+    Controls.Add(numericUpDownB);
+    Controls.Add(numericUpDownA);
+    Controls.Add(numericUpDownY);
+    Controls.Add(numericUpDownX);
+    Controls.Add(listBoxResult);
+    Controls.Add(textBoxResult);
+    Controls.Add(buttonCalculate);
+    Controls.Add(labelB);
+    Controls.Add(labelA);
+    Controls.Add(labelY);
+    Controls.Add(labelX);
+    Font = new System.Drawing.Font("Segoe UI", 10F);
+    FormBorderStyle = FormBorderStyle.FixedSingle;
+    Icon = RuntimeResources.MainIcon;
+    Margin = new Padding(3, 4, 3, 4);
+    Name = "CalculatorForm";
+    StartPosition = FormStartPosition.CenterParent;
+    Text = "rcalc";
+    ((System.ComponentModel.ISupportInitialize)numericUpDownA).EndInit();
+    ((System.ComponentModel.ISupportInitialize)numericUpDownB).EndInit();
+    ((System.ComponentModel.ISupportInitialize)numericUpDownX).EndInit();
+    ((System.ComponentModel.ISupportInitialize)numericUpDownY).EndInit();
+    ResumeLayout(false);
+    PerformLayout();
+  }
+
+  #endregion
+
+  private Button buttonCalculate;
+  private CleanNumericUpDown numericUpDownA;
+  private CleanNumericUpDown numericUpDownB;
+  private CleanNumericUpDown numericUpDownX;
+  private CleanNumericUpDown numericUpDownY;
+  private Label labelA;
+  private Label labelB;
+  private Label labelX;
+  private Label labelY;
+  private ListBox listBoxResult;
+  private TextBox textBoxResult;
+}

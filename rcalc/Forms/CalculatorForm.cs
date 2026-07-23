@@ -4,8 +4,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace rcalc.Forms {
-[SuppressMessage("ReSharper", "LocalizableElement")]
+namespace rcalc.Forms;
+
 public partial class CalculatorForm : Form {
   public CalculatorForm(decimal x, decimal y, decimal a) {
     InitializeComponent();
@@ -17,9 +17,7 @@ public partial class CalculatorForm : Form {
     Calculate(true);
   }
 
-  private void ButtonCalculate_Click(object _, System.EventArgs e) {
-    Calculate(true);
-  }
+  private void ButtonCalculate_Click(object _, System.EventArgs e) => Calculate(true);
 
   private void ListBoxResult_MouseDoubleClick(object _, MouseEventArgs e) {
     if (listBoxResult.SelectedItem == null) return;
@@ -38,7 +36,9 @@ public partial class CalculatorForm : Form {
         numericUpDownA.Value = arr[2];
         Calculate(false);
       }
-    } else { MessageBox.Show("Failed to parse result with regex!"); }
+    } else {
+      MessageBox.Show("Failed to parse result with regex!");
+    }
   }
 
   private void Calculate(bool addToList = false) {
@@ -70,8 +70,5 @@ public partial class CalculatorForm : Form {
     listBoxResult.SelectedItem = s;
   }
 
-  private static string Clean(decimal value) {
-    return value.ToString("0.############################", CultureInfo.CurrentCulture);
-  }
-}
+  private static string Clean(decimal value) => value.ToString("0.############################", CultureInfo.CurrentCulture);
 }
