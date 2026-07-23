@@ -6,7 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace Pathed.Libraries {
+namespace Pathed.Libraries;
+
 public sealed partial class EnvPath {
   private const uint FileFlagBackupSemantics = 0x02000000;
   private const uint FileNameNormalized = 0x0;
@@ -25,7 +26,9 @@ public sealed partial class EnvPath {
 
   public int Append(string value) {
     string normalized;
-    try { normalized = Normalize(value); } catch (Win32Exception) {
+    try {
+      normalized = Normalize(value);
+    } catch (Win32Exception) {
       WriteError($"Failed to get full path of '{value}'.");
       return 1;
     }
@@ -38,7 +41,9 @@ public sealed partial class EnvPath {
 
   public int Prepend(string value) {
     string normalized;
-    try { normalized = Normalize(value); } catch (Win32Exception) {
+    try {
+      normalized = Normalize(value);
+    } catch (Win32Exception) {
       WriteError($"Failed to get full path of '{value}'.");
       return 1;
     }
@@ -62,7 +67,7 @@ public sealed partial class EnvPath {
     Console.ForegroundColor = ConsoleColor.Cyan;
     Console.WriteLine(_key);
     Console.ForegroundColor = ConsoleColor.Yellow;
-    Console.Write("Variable Target: ");
+    Console.Write("Variable Scope: ");
     Console.ForegroundColor = ConsoleColor.Cyan;
     Console.WriteLine(_target);
     Console.ForegroundColor = ConsoleColor.Yellow;
@@ -96,7 +101,6 @@ public sealed partial class EnvPath {
         string full = Normalize(p);
         if (!DoesExist(full)) continue;
         if (seen.Add(full)) cleaned.Add(full);
-        // ReSharper disable once RedundantJumpStatement
       } catch { continue; }
     }
 
@@ -158,5 +162,4 @@ public sealed partial class EnvPath {
 
   [LibraryImport("kernel32.dll", EntryPoint = "GetFinalPathNameByHandleW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
   private static partial uint GetFinalPathNameByHandle(SafeFileHandle hFile, [Out] char[] lpszFilePath, uint cchFilePath, uint dwFlags);
-}
 }

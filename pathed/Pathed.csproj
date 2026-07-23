@@ -4,9 +4,10 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <!-- Code Style -->
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AnalysisLevel>latest</AnalysisLevel>
     <DebugType>none</DebugType>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
-    <Nullable>enable</Nullable>
     <!-- Assembly Information -->
     <AssemblyTitle>pathed</AssemblyTitle>
     <AssemblyVersion>1.1.0.0</AssemblyVersion>
@@ -20,14 +21,17 @@
     <Product>$(AssemblyTitle)</Product>
     <Title>$(AssemblyTitle)</Title>
     <!-- Publish -->
-    <PublishSingleFile>true</PublishSingleFile>
     <!--
-    <PublishTrimmed>true</PublishTrimmed>
-    <SelfContained>true</SelfContained>
-    -->
+    <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>false</SelfContained>
+    -->
+    <!-- NativeAOT Publish is enabled explicitly during publish -->
+    <PublishAot>false</PublishAot>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
+    <PackageReference Include="ConsoleAppFramework" Version="5.7.13">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 </Project>

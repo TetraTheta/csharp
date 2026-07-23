@@ -1,7 +1,10 @@
 using System;
 using System.Security.Principal;
 
-namespace Pathed.Libraries {
+using Pathed.Libraries.Option;
+
+namespace Pathed.Libraries;
+
 public static class Runner {
   /*
    * For slow operation:
@@ -11,7 +14,6 @@ public static class Runner {
    * I think reboot is only solution.
    */
   private static int ExecuteMutation(string key, EnvironmentVariableTarget target, Func<EnvPath, int> action, string message) {
-    // ReSharper disable once ConvertIfStatementToSwitchStatement
     if (target == EnvironmentVariableTarget.Process) {
       Console.ForegroundColor = ConsoleColor.Red;
       Console.Error.WriteLine("You cannot edit environment variable on Process target. It is temporary edit!");
@@ -33,21 +35,21 @@ public static class Runner {
     return 0;
   }
 
-  public static int Append(AppendOptions opt) => ExecuteMutation(opt.Key, opt.Target, p => p.Append(opt.Value), $"Appended '{opt.Value}' to '{opt.Key}'.");
+  public static int Append(AppendOption opt) => ExecuteMutation(opt.Name, opt.Scope, p => p.Append(opt.Value), $"Appended '{opt.Value}' to '{opt.Name}'.");
 
-  public static int Prepend(PrependOptions opt) => ExecuteMutation(opt.Key, opt.Target, p => p.Prepend(opt.Value), $"Prepended '{opt.Value}' to '{opt.Key}'.");
+  public static int Prepend(PrependOption opt) => ExecuteMutation(opt.Name, opt.Scope, p => p.Prepend(opt.Value), $"Prepended '{opt.Value}' to '{opt.Name}'.");
 
-  public static int Remove(RemoveOptions opt) => ExecuteMutation(opt.Key, opt.Target, p => p.Remove(opt.Value), $"Removed '{opt.Value}' from '{opt.Key}'.");
+  public static int Remove(RemoveOption opt) => ExecuteMutation(opt.Name, opt.Scope, p => p.Remove(opt.Value), $"Removed '{opt.Value}' from '{opt.Name}'.");
 
-  public static int Show(ShowOptions opt) {
-    EnvPath envPath = new EnvPath(opt.Key, opt.Target);
+  public static int Show(ShowOption opt) {
+    EnvPath envPath = new EnvPath(opt.Name, opt.Scope);
     envPath.Show();
     return 0;
   }
 
-  public static int Slim(SlimOptions opt) => ExecuteMutation(opt.Key, opt.Target, p => p.Slim(), $"Slimmed '{opt.Key}'.");
+  public static int Slim(SlimOption opt) => ExecuteMutation(opt.Name, opt.Scope, p => p.Slim(), $"Slimmed '{opt.Name}'.");
 
-  public static int Sort(SortOptions opt) => ExecuteMutation(opt.Key, opt.Target, p => p.Sort(), $"Sorted '{opt.Key}'.");
+  public static int Sort(SortOption opt) => ExecuteMutation(opt.Name, opt.Scope, p => p.Sort(), $"Sorted '{opt.Name}'.");
 
   // This doesn't actually create elevated process, but I'll use this name for later use.
   private static void Elevate() {
@@ -65,5 +67,4 @@ public static class Runner {
    * 3. Parent process will listen to that named pipe, and elevated child process will send message to the named pipe
    * 4. Parent process will print message to console
    */
-}
 }

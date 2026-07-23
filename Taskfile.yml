@@ -63,7 +63,7 @@ tasks:
     env:
       CS_FRAMEWORK: net10.0-windows
     cmds:
-      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET -p:PublishAot=true'
       - 'mkdir "$CS_DIST" 2> /dev/null'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/Pathed.exe "$CS_DIST"'
   build:rcalc:
