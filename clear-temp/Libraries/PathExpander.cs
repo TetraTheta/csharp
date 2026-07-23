@@ -1,9 +1,11 @@
-﻿using System;
+#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace ClearTemp.Libraries {
+namespace ClearTemp.Libraries;
+
 public static class PathExpander {
   private static readonly char Sep = Path.DirectorySeparatorChar;
 
@@ -28,8 +30,7 @@ public static class PathExpander {
             string combined = Path.Combine(baseDir, seg);
             if (Directory.Exists(combined)) next.Add(combined);
           }
-          // ReSharper disable once EmptyGeneralCatchClause
-        } catch { }
+        } catch {}
       }
 
       if (next.Count == 0) yield break;
@@ -41,7 +42,6 @@ public static class PathExpander {
       yield break;
     }
 
-    foreach (string d in currentBases.Where(Directory.Exists)) { yield return d; }
+    foreach (string d in currentBases.Where(Directory.Exists)) yield return d;
   }
-}
 }

@@ -1,10 +1,12 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+
 using ClearTemp.Libraries;
 
-namespace ClearTemp {
+namespace ClearTemp;
+
 public static class Program {
   public static void Main(string[] args) {
     AppContext.SetSwitch("Switch.System.IO.BlockLongPaths", false);
@@ -15,8 +17,7 @@ public static class Program {
 
     string configFile;
     if (File.Exists(currentDir)) configFile = Path.GetFullPath(currentDir);
-    else if (File.Exists(binaryDir)) configFile = Path.GetFullPath(binaryDir);
-    else throw new FileNotFoundException("'ClearTemp.txt' is not found");
+    else configFile = File.Exists(binaryDir) ? Path.GetFullPath(binaryDir) : throw new FileNotFoundException("'ClearTemp.txt' is not found");
 
     string[] lines = File.ReadAllLines(configFile);
     IEnumerable<ConfigEntry> entries = ConfigParser.Parse(lines);
@@ -32,7 +33,6 @@ public static class Program {
 
     Console.WriteLine();
     Console.WriteLine("Press any key to continue...");
-    Console.ReadKey(true);
+    _ = Console.ReadKey(true);
   }
-}
 }

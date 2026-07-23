@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ClearTemp.Libraries {
+namespace ClearTemp.Libraries;
+
 public static class ConfigParser {
   public static IEnumerable<ConfigEntry> Parse(string[] lines) {
     foreach (string raw in lines) {
@@ -22,12 +23,13 @@ public static class ConfigParser {
       PatternSet patterns = PatternSet.Parse(partPattern);
 
       RemoveOption option;
-      if (string.Equals(partOption, "RECURSE", StringComparison.OrdinalIgnoreCase)) { option = RemoveOption.Recurse; } else if (string.Equals(partOption, "REMOVESELF", StringComparison.OrdinalIgnoreCase)) { option = RemoveOption.RemoveSelf; } else {
-        option = RemoveOption.None;
+      if (string.Equals(partOption, "RECURSE", StringComparison.OrdinalIgnoreCase)) {
+        option = RemoveOption.Recurse;
+      } else {
+        option = string.Equals(partOption, "REMOVESELF", StringComparison.OrdinalIgnoreCase) ? RemoveOption.RemoveSelf : RemoveOption.None;
       }
 
       yield return new ConfigEntry(rawPath, patterns, option);
     }
   }
-}
 }

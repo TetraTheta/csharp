@@ -1,7 +1,8 @@
 using System;
 using System.IO;
 
-namespace ClearTemp.Libraries {
+namespace ClearTemp.Libraries;
+
 public static class Remover {
   public static void Process(string path, PatternSet patterns, RemoveOption option) {
     if (!Directory.Exists(path)) return;
@@ -27,7 +28,9 @@ public static class Remover {
         if (!patterns.IsMatch(file)) continue;
         File.Delete(file);
         ConsolePrinter.PrintResult(ResultKind.Success, file);
-      } catch (Exception e) { HandleException(e, file); }
+      } catch (Exception e) {
+        HandleException(e, file);
+      }
     }
   }
 
@@ -38,12 +41,16 @@ public static class Remover {
         if (!patterns.IsMatch(file)) continue;
         File.Delete(file);
         ConsolePrinter.PrintResult(ResultKind.Success, file);
-      } catch (Exception e) { HandleException(e, file); }
+      } catch (Exception e) {
+        HandleException(e, file);
+      }
     }
 
     // Recurse into subdirectories
     foreach (string sub in SafeIo.EnumerateDirectories(path)) {
-      try { ClearRecursive(sub, patterns, true); } catch {
+      try {
+        ClearRecursive(sub, patterns, true);
+      } catch {
         // ignored
       }
     }
@@ -52,7 +59,9 @@ public static class Remover {
     try {
       Directory.Delete(path);
       ConsolePrinter.PrintResult(ResultKind.Success, path);
-    } catch (Exception e) { HandleException(e, path); }
+    } catch (Exception e) {
+      HandleException(e, path);
+    }
   }
 
   private static void HandleException(Exception e, string path) {
@@ -69,5 +78,4 @@ public static class Remover {
         break;
     }
   }
-}
 }

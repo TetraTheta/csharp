@@ -33,9 +33,10 @@ tasks:
       - task: build:pathed
       - task: build:rcalc
   build:clear-temp:
+    aliases: ["build:cleartemp"]
     dir: clear-temp
     cmds:
-      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET'
+      - '"$CS_DOTNET" publish -c $CS_CONFIGURATION -r $CS_TARGET -p:PublishAot=true'
       - 'mkdir "$CS_DIST" 2> /dev/null'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.exe "$CS_DIST"'
       - 'mv bin/$CS_CONFIGURATION/$CS_FRAMEWORK/$CS_TARGET/publish/ClearTemp.txt "$CS_DIST"'
