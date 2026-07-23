@@ -29,7 +29,7 @@ public static class Remover {
         File.Delete(file);
         ConsolePrinter.PrintResult(ResultKind.Success, file);
       } catch (Exception e) {
-        HandleException(e, file);
+        ConsolePrinter.PrintException(e, file);
       }
     }
   }
@@ -42,14 +42,14 @@ public static class Remover {
         File.Delete(file);
         ConsolePrinter.PrintResult(ResultKind.Success, file);
       } catch (Exception e) {
-        HandleException(e, file);
+        ConsolePrinter.PrintException(e, file);
       }
     }
 
     // Recurse into subdirectories
     foreach (string sub in SafeIo.EnumerateDirectories(path)) {
       try {
-        ClearRecursive(sub, patterns, true);
+        ClearRecursive(sub, patterns, deleteThisDir);
       } catch {
         // ignored
       }
@@ -60,22 +60,7 @@ public static class Remover {
       Directory.Delete(path);
       ConsolePrinter.PrintResult(ResultKind.Success, path);
     } catch (Exception e) {
-      HandleException(e, path);
-    }
-  }
-
-  private static void HandleException(Exception e, string path) {
-    switch (e.GetBaseException()) {
-      case IOException _:
-        ConsolePrinter.PrintResult(ResultKind.Locked, path);
-        break;
-      case UnauthorizedAccessException _:
-        ConsolePrinter.PrintResult(ResultKind.NoPerm, path);
-        break;
-      default:
-        Console.WriteLine($"      {e.GetType().FullName}");
-        Console.WriteLine($"      {e.Message}");
-        break;
+      ConsolePrinter.PrintException(e, path);
     }
   }
 }

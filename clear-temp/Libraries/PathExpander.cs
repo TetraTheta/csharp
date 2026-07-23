@@ -14,10 +14,15 @@ public static class PathExpander {
 
     string norm = pathPattern.Trim().Replace('/', Sep);
 
-    string? root = Path.GetPathRoot(norm);
-    if (string.IsNullOrWhiteSpace(root)) root = Path.GetFullPath(Environment.CurrentDirectory);
-
-    string rest = norm[root.Length..].Trim(Sep);
+    string root;
+    string rest;
+    if (Path.IsPathRooted(norm)) {
+      root = Path.GetPathRoot(norm) ?? string.Empty;
+      rest = norm[root.Length..].Trim(Sep);
+    } else {
+      root = Path.GetFullPath(Environment.CurrentDirectory);
+      rest = norm.Trim(Sep);
+    }
 
     string[] segments = rest.Length == 0 ? [] : rest.Split(Sep);
     var currentBases = new List<string> { root.TrimEnd(Sep) + Sep };

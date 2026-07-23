@@ -31,6 +31,8 @@ public static class Program {
       }
     }
 
+    if (Console.IsInputRedirected) return;
+
     Console.WriteLine();
     Console.WriteLine("Press any key to continue...");
     _ = Console.ReadKey(true);

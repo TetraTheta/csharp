@@ -39,17 +39,16 @@ public sealed class PatternSet {
 
   public bool IsMatch(string path) {
     string filename = Path.GetFileName(path);
-    string filenameWithoutExt = Path.GetFileNameWithoutExtension(path);
 
-    bool positiveMatch = _positives.Any(p => WildcardMatches(filename, filenameWithoutExt, p));
+    bool positiveMatch = _positives.Any(p => WildcardMatches(filename, p));
     if (!positiveMatch) return false;
 
-    bool negativeMatch = _negatives.Any(n => WildcardMatches(filename, filenameWithoutExt, n));
+    bool negativeMatch = _negatives.Any(n => WildcardMatches(filename, n));
     return !negativeMatch;
   }
 
-  private static bool WildcardMatches(string filename, string filenameWithoutExt, string pattern) {
-    if (!pattern.Contains('*')) return string.Equals(pattern.Contains('.') ? filename : filenameWithoutExt, pattern, StringComparison.OrdinalIgnoreCase);
+  private static bool WildcardMatches(string filename, string pattern) {
+    if (!pattern.Contains('*')) return string.Equals(filename, pattern, StringComparison.OrdinalIgnoreCase);
 
     string rx = WildcardToRegex(pattern);
     return Regex.IsMatch(filename, rx, RegexOptions.IgnoreCase);
