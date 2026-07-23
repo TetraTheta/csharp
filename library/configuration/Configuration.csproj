@@ -3,8 +3,9 @@
     <OutputType>Library</OutputType>
     <TargetFramework>net10.0</TargetFramework>
     <!-- Code Style -->
+    <AnalysisLevel>latest</AnalysisLevel>
     <DebugType>none</DebugType>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <NoWarn>$(NoWarn);WFO5001;WPF0001</NoWarn>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 </Project>

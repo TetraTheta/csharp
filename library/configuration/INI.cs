@@ -1,15 +1,18 @@
-﻿using System;
+#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+
 using Configuration.Libraries;
 
-namespace Configuration {
+namespace Configuration;
+
 public class Ini {
   private static readonly NaturalStringComparer Comparer = new();
   private readonly SortedDictionary<string, SortedDictionary<string, string>> _data;
   private readonly string _filePath;
-
+  
   public Ini(string iniPath) {
     string baseDir = AppContext.BaseDirectory;
     _filePath = Path.Combine(baseDir, iniPath);
@@ -18,9 +21,7 @@ public class Ini {
 
     if (!File.Exists(_filePath)) {
       Directory.CreateDirectory(Path.GetDirectoryName(_filePath) ?? baseDir);
-      using (File.Create(_filePath)) {
-        // empty
-      }
+      using (File.Create(_filePath)) {}
     }
 
     LoadFromFile();
@@ -86,8 +87,7 @@ public class Ini {
     foreach (KeyValuePair<string, SortedDictionary<string, string>> sectionPair in _data) {
       string sectionName = sectionPair.Key;
       writer.WriteLine($"[{sectionName}]");
-      foreach (KeyValuePair<string, string> keyPair in sectionPair.Value) { writer.WriteLine($"{keyPair.Key}={keyPair.Value}"); }
+      foreach (KeyValuePair<string, string> keyPair in sectionPair.Value) writer.WriteLine($"{keyPair.Key}={keyPair.Value}");
     }
   }
-}
 }

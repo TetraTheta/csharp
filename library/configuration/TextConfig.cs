@@ -4,7 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace Configuration {
+namespace Configuration;
+
 public partial class TextConfig {
   public static ProcessStartInfo[] ParseCommandLine(string path) {
     if (!File.Exists(path)) throw new FileNotFoundException("Config file not found", path);
@@ -14,11 +15,13 @@ public partial class TextConfig {
 
     foreach (string raw in lines.Where(l => !string.IsNullOrWhiteSpace(l))) {
       (string exePath, string args) = TokenizeCommandLine(raw);
-
       if (!Path.IsPathRooted(exePath) || exePath.IndexOfAny(Path.GetInvalidPathChars()) >= 0) throw new InvalidDataException($"Invalid path for executable: {exePath}");
-
-      var psi = new ProcessStartInfo() { FileName = exePath, Arguments = args, UseShellExecute = true, WorkingDirectory = Path.GetDirectoryName(exePath) ?? Path.GetPathRoot(exePath) };
-
+      var psi = new ProcessStartInfo() {
+        FileName = exePath,
+        Arguments = args,
+        UseShellExecute = true,
+        WorkingDirectory = Path.GetDirectoryName(exePath) ?? Path.GetPathRoot(exePath)
+      };
       list.Add(psi);
     }
 
@@ -34,9 +37,7 @@ public partial class TextConfig {
     foreach (string raw in lines.Where(l => !string.IsNullOrWhiteSpace(l))) {
       string trimmed = raw.Trim();
       if (trimmed.StartsWith('"') && trimmed.EndsWith('"')) trimmed = trimmed.Substring(1, trimmed.Length - 2);
-
       if (trimmed.IndexOfAny(Path.GetInvalidPathChars()) >= 0) throw new InvalidDataException($"Invalid path: {trimmed}");
-
       list.Add(trimmed);
     }
 
@@ -55,5 +56,4 @@ public partial class TextConfig {
 
   [GeneratedRegex("""\s*(?:"(?<quoted>[^"]*)"|(?<token>[^ \t"]+))""")]
   private static partial Regex MyRegex();
-}
 }
