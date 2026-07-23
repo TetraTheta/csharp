@@ -12,11 +12,6 @@ namespace GModDescriptionGenerator.Forms;
 
 public partial class MainForm : Form {
   private DateTime today = DateTime.Today;
-  private readonly JsonSerializerOptions jsonOpt = new JsonSerializerOptions {
-    WriteIndented = true,
-    IndentCharacter = ' ',
-    IndentSize = 2
-  };
 
   public MainForm() {
     InitializeComponent();
@@ -34,7 +29,7 @@ public partial class MainForm : Form {
   private void OpenFile(string filePath) {
     try {
       string jsonString = File.ReadAllText(filePath);
-      DescriptionSettings settings = JsonSerializer.Deserialize<DescriptionSettings>(jsonString);
+      DescriptionSettings settings = JsonSerializer.Deserialize(jsonString, DescriptionJsonContext.Default.DescriptionSettings);
       if (settings == null) throw new InvalidDataException("Could not parse JSON file content");
       settings.TrimAll();
       // sanitize Release Date
@@ -47,6 +42,7 @@ public partial class MainForm : Form {
       comboBoxRDDate.SelectedIndex = settings.RDDate;
       comboBoxRDMonth.SelectedIndex = settings.RDMonth;
       comboBoxRDYear.SelectedIndex = settings.RDYear;
+      checkBoxNoRD.Checked = settings.NoRD;
       textBoxDescription.Text = settings.Description.NativeLine;
       textBoxSynopsis.Text = settings.Synopsis.NativeLine;
       checkBoxHL2.Checked = settings.HL2;
@@ -86,6 +82,7 @@ public partial class MainForm : Form {
       comboBoxRDDate.SelectedIndex = comboBoxRDDate.FindStringExact(today.Day.ToString());
       comboBoxRDMonth.SelectedIndex = comboBoxRDMonth.FindStringExact(today.ToString("MMM", CultureInfo.InvariantCulture));
       comboBoxRDYear.SelectedIndex = comboBoxRDYear.FindStringExact(today.Year.ToString());
+      checkBoxNoRD.Checked = false;
       textBoxDescription.Text = string.Empty;
       textBoxSynopsis.Text = string.Empty;
       checkBoxHL2.Checked = true;
@@ -114,9 +111,9 @@ public partial class MainForm : Form {
     // Title
     sb.Append($"[h1]{textBoxTitle.TrimmedText}[/h1]\n");
     // Author(s)
-    sb.Append($"[i]created by {textBoxAuthor.TrimmedText}[/i]\n\n");
+    sb.Append($"[i]created by {textBoxAuthor.TrimmedText}[/i]\n");
     // Release Date
-    sb.Append($"Date of publish: {comboBoxRDDate.TrimmedText} {comboBoxRDMonth.TrimmedText} {comboBoxRDYear.TrimmedText}\n");
+    if (!checkBoxNoRD.Checked) sb.Append($"\nDate of publish: {comboBoxRDDate.TrimmedText} {comboBoxRDMonth.TrimmedText} {comboBoxRDYear.TrimmedText}\n");
     // Horizontal Rule
     sb.Append("[hr][/hr]");
     // Description
@@ -200,6 +197,7 @@ public partial class MainForm : Form {
         RDDate = comboBoxRDDate.SelectedIndex,
         RDMonth = comboBoxRDMonth.SelectedIndex,
         RDYear = comboBoxRDYear.SelectedIndex,
+        NoRD = checkBoxNoRD.Checked,
         Description = textBoxDescription.TrimmedText.UnixLine,
         Synopsis = textBoxSynopsis.TrimmedText.UnixLine,
         HL2 = checkBoxHL2.Checked,
@@ -213,7 +211,7 @@ public partial class MainForm : Form {
         Warning = textBoxWarning.TrimmedText.UnixLine,
       };
       try {
-        string jsonString = JsonSerializer.Serialize(settings, jsonOpt);
+        string jsonString = JsonSerializer.Serialize(settings, DescriptionJsonContext.Default.DescriptionSettings);
         File.WriteAllText(saveFileDialog.FileName, jsonString);
         // set directory
         string dir = Path.GetDirectoryName(saveFileDialog.FileName);
@@ -228,9 +226,7 @@ public partial class MainForm : Form {
     }
   }
 
-  private void tsmiExit_Click(object sender, EventArgs e) {
-    Application.Exit();
-  }
+  private void tsmiExit_Click(object sender, EventArgs e) => Application.Exit();
 
   private void MainForm_DragEnter(object sender, DragEventArgs e) {
     if (!e.Data.GetDataPresent(DataFormats.FileDrop)) {

@@ -6,6 +6,7 @@ public class DescriptionSettings {
   public int RDDate { get; set; } = 0;
   public int RDMonth { get; set; } = 0;
   public int RDYear { get; set; } = 0;
+  public bool NoRD { get; set; } = false;
   public string Description { get; set; } = string.Empty;
   public string Synopsis { get; set; } = string.Empty;
   public bool HL2 { get; set; } = true;

@@ -6,7 +6,6 @@ namespace GModDescriptionGenerator.Forms;
 partial class MainForm {
   private System.ComponentModel.IContainer components = null;
 
-  /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
   protected override void Dispose(bool disposing) {
     if (disposing && (components != null)) components.Dispose();
     base.Dispose(disposing);
@@ -25,6 +24,7 @@ partial class MainForm {
     checkBoxCSS = new CheckBox();
     checkBoxHL2 = new CheckBox();
     checkBoxL4D2 = new CheckBox();
+    checkBoxNoRD = new CheckBox();
     checkBoxRecompiled = new CheckBox();
     checkBoxSCTools = new CheckBox();
     checkBoxSubtitle = new CheckBox();
@@ -32,7 +32,7 @@ partial class MainForm {
     comboBoxRDDate = new ComboBox();
     comboBoxRDMonth = new ComboBox();
     comboBoxRDYear = new ComboBox();
-    fileToolStripMenuItem = new ToolStripMenuItem();
+    tsmiFile = new ToolStripMenuItem();
     tsmiOpen = new ToolStripMenuItem();
     tsmiSave = new ToolStripMenuItem();
     sepSave = new ToolStripSeparator();
@@ -122,6 +122,16 @@ partial class MainForm {
     checkBoxL4D2.Text = "L4D2";
     checkBoxL4D2.UseVisualStyleBackColor = true;
     // 
+    // checkBoxNoRD
+    // 
+    checkBoxNoRD.AutoSize = true;
+    checkBoxNoRD.Location = new Point(340, 83);
+    checkBoxNoRD.Name = "checkBoxNoRD";
+    checkBoxNoRD.Size = new Size(128, 23);
+    checkBoxNoRD.TabIndex = 17;
+    checkBoxNoRD.Text = "No Release Date";
+    checkBoxNoRD.UseVisualStyleBackColor = true;
+    // 
     // checkBoxRecompiled
     // 
     checkBoxRecompiled.Location = new Point(112, 550);
@@ -195,19 +205,19 @@ partial class MainForm {
     comboBoxRDYear.Size = new Size(70, 25);
     comboBoxRDYear.TabIndex = 5;
     // 
-    // fileToolStripMenuItem
+    // tsmiFile
     // 
-    fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmiOpen, tsmiSave, sepSave, tsmiExit });
-    fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-    fileToolStripMenuItem.Size = new Size(37, 20);
-    fileToolStripMenuItem.Text = "&File";
+    tsmiFile.DropDownItems.AddRange(new ToolStripItem[] { tsmiOpen, tsmiSave, sepSave, tsmiExit });
+    tsmiFile.Name = "tsmiFile";
+    tsmiFile.Size = new Size(37, 20);
+    tsmiFile.Text = "&File";
     // 
     // tsmiOpen
     // 
     tsmiOpen.Name = "tsmiOpen";
     tsmiOpen.ShortcutKeyDisplayString = "Ctrl + O";
     tsmiOpen.ShortcutKeys = Keys.Control | Keys.O;
-    tsmiOpen.Size = new Size(154, 22);
+    tsmiOpen.Size = new Size(180, 22);
     tsmiOpen.Text = "&Open";
     tsmiOpen.Click += tsmiOpen_Click;
     // 
@@ -216,26 +226,27 @@ partial class MainForm {
     tsmiSave.Name = "tsmiSave";
     tsmiSave.ShortcutKeyDisplayString = "Ctrl + S";
     tsmiSave.ShortcutKeys = Keys.Control | Keys.S;
-    tsmiSave.Size = new Size(154, 22);
+    tsmiSave.Size = new Size(180, 22);
     tsmiSave.Text = "&Save";
     tsmiSave.Click += tsmiSave_Click;
     // 
     // sepSave
     // 
     sepSave.Name = "sepSave";
-    sepSave.Size = new Size(151, 6);
+    sepSave.Size = new Size(177, 6);
     // 
     // tsmiExit
     // 
     tsmiExit.Name = "tsmiExit";
     tsmiExit.ShortcutKeyDisplayString = "Alt + F4";
     tsmiExit.ShortcutKeys = Keys.Alt | Keys.F4;
-    tsmiExit.Size = new Size(154, 22);
+    tsmiExit.Size = new Size(180, 22);
     tsmiExit.Text = "&Exit";
     tsmiExit.Click += tsmiExit_Click;
     // 
     // groupBoxOption
     // 
+    groupBoxOption.Controls.Add(checkBoxNoRD);
     groupBoxOption.Controls.Add(checkBoxCSS);
     groupBoxOption.Controls.Add(checkBoxHL2);
     groupBoxOption.Controls.Add(checkBoxL4D2);
@@ -414,7 +425,7 @@ partial class MainForm {
     // 
     // menuStrip
     // 
-    menuStrip.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem });
+    menuStrip.Items.AddRange(new ToolStripItem[] { tsmiFile });
     menuStrip.Location = new Point(0, 0);
     menuStrip.Name = "menuStrip";
     menuStrip.Size = new Size(984, 24);
@@ -471,6 +482,7 @@ partial class MainForm {
   private CheckBox checkBoxCSS;
   private CheckBox checkBoxHL2;
   private CheckBox checkBoxL4D2;
+  private CheckBox checkBoxNoRD;
   private CheckBox checkBoxRecompiled;
   private CheckBox checkBoxSCTools;
   private CheckBox checkBoxSubtitle;
@@ -499,8 +511,8 @@ partial class MainForm {
   private TextBox textBoxSynopsis;
   private TextBox textBoxTitle;
   private TextBox textBoxWarning;
-  private ToolStripMenuItem fileToolStripMenuItem;
   private ToolStripMenuItem tsmiExit;
+  private ToolStripMenuItem tsmiFile;
   private ToolStripMenuItem tsmiOpen;
   private ToolStripMenuItem tsmiSave;
   private ToolStripSeparator sepSave;
