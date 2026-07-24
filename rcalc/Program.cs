@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
-using rcalc.Forms;
+
+using rcalc.UI;
 
 namespace rcalc;
 

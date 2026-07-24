@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ApplicationIcon>Resources\MainIcon.ico</ApplicationIcon>
+    <AppDesignerFolder>Property</AppDesignerFolder>
+    <ApplicationIcon>Resource\MainIcon.ico</ApplicationIcon>
     <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
     <OutputType>WinExe</OutputType>
     <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
@@ -34,29 +35,29 @@
     <_SuppressWinFormsTrimError>true</_SuppressWinFormsTrimError>
   </PropertyGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\MainIcon.ico" />
-    <EmbeddedResource Include="Resources\game_gmod_32.png" />
-    <EmbeddedResource Include="Resources\game_gmod_gray_32.png" />
-    <EmbeddedResource Include="Resources\game_hl2_32.png" />
-    <EmbeddedResource Include="Resources\game_hl2_gray_32.png" />
-    <EmbeddedResource Include="Resources\hammer_gmod_32.png" />
-    <EmbeddedResource Include="Resources\hammer_hl2_32.png" />
-    <EmbeddedResource Include="Resources\hammer_hpp_32.png" />
+    <EmbeddedResource Include="Resource\MainIcon.ico" />
+    <EmbeddedResource Include="Resource\game_gmod_32.png" />
+    <EmbeddedResource Include="Resource\game_gmod_gray_32.png" />
+    <EmbeddedResource Include="Resource\game_hl2_32.png" />
+    <EmbeddedResource Include="Resource\game_hl2_gray_32.png" />
+    <EmbeddedResource Include="Resource\hammer_gmod_32.png" />
+    <EmbeddedResource Include="Resource\hammer_hl2_32.png" />
+    <EmbeddedResource Include="Resource\hammer_hpp_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Forms\Launcher.Designer.cs">
+    <Compile Update="UI\Launcher.Designer.cs">
       <DependentUpon>Launcher.cs</DependentUpon>
     </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
+    <Compile Update="Property\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>Resource.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
+    <EmbeddedResource Update="Property\Resource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

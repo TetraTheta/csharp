@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-using Configuration.Libraries;
+using Configuration.Common.Comparer;
 
 namespace Configuration;
 

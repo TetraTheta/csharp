@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-using GModDescriptionGenerator.Forms;
+using GModDescriptionGenerator.UI;
 
 namespace GModDescriptionGenerator;
 

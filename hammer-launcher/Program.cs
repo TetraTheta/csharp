@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Windows.Forms;
 
-using HammerLauncher.Forms;
+using HammerLauncher.UI;
 
 namespace HammerLauncher;
 
