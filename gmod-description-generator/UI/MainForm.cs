@@ -145,13 +145,14 @@ public partial class MainForm : Form {
     }
     // Recommendations
     sb.Append("[h2]Recommendations[/h2]\n");
-    sb.Append("To prevent CTD or frame drops, follow these steps:\n");
-    sb.Append("[list]\n");
-    sb.Append("  [*]Use 'x86-64' beta for 64-bit Garry's Mod.\n");
-    sb.Append("  [*]Disable or unsubscribe from non-essential add-ons.\n");
-    sb.Append("  [*]If the game is still broken, factory reset it.\n");
-    sb.Append("[/list]\n");
-    sb.Append("The maps tested fine without lags or CTDs. Any issues you face are likely system-specific, which unfortunately I can't fix.\n");
+    sb.Append("To prevent or troubleshoot CTDs, frame drops, and add-on issues:\n");
+    sb.Append("[olist]\n");
+    sb.Append("  [*]Use 64-bit GMod via the 'x86-64' beta branch.\n");
+    sb.Append("  [*]Disable or unsubscribe from unnecessary add-ons.\n");
+    sb.Append("  [*][Troubleshooting] Unsubscribe from all other add-ons (keep only this one).\n");
+    sb.Append("  [*][Troubleshooting] Factory reset GMod using 'FactoryReset-GMod.bat'.\n");
+    sb.Append("[/olist]\n");
+    sb.Append("The maps tested fine without lags or CTDs. Any issues you encounter are likely system-specific, which unfortunately I can't fix.\n");
     if (checkBoxSCTools.Checked) {
       sb.Append("\n[url=https://steamcommunity.com/sharedfiles/filedetails/?id=3207465120]SC Tools[/url] is required for level transitions. You can still play without it, but transitions won't work.\n");
     } else {
@@ -176,7 +177,7 @@ public partial class MainForm : Form {
     }
     // Disclaimer
     sb.Append("[h2]Disclaimer[/h2]\n");
-    sb.Append("Tested only in Singleplayer Sandbox. Compatibility with other gamemodes or Multiplayer is not guaranteed.\n\n");
+    sb.Append("Tested only in Singleplayer Sandbox on the 'x86-64' beta branch. Compatibility with other gamemodes or Multiplayer is not guaranteed.\n\n");
     sb.Append("I did not create these maps; I only [i]ported[/i] them to Garry's Mod. All credit goes to the original authors.\n");
     // Search Tag
     sb.Append("[hr][/hr]Search Tag: [spoiler]half life hl2 custom campaign[/spoiler]");
